@@ -1,0 +1,186 @@
+<!--
+    Emotion Recognition Study
+
+    Sophie Hoyer 2024.
+    Neurophilosophy Lab @ McGill University [https://www.neurophilosophylab.org].
+
+    This experiment was built using jsPsych v6.3.1:
+    de Leeuw, J.R., Gilbert, R.A., & Luchterhandt, B. (2023).
+    jsPsych: Enabling an open-source collaborative ecosystem of behavioral experiments. 
+    Journal of Open Source Software, 8(85), 5351, https://joss.theoj.org/papers/10.21105/joss.05351.
+-->
+
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Emotion Recognition Study</title>
+        
+        <!-- jsPsych and Stylesheet -->
+        <script src="jspsych-6.3.1/jspsych.js"></script>
+        <link href="jspsych-6.3.1/css/jspsych.css" rel="stylesheet" type="text/css">
+        <link href="jspsych-6.3.1/css/custom.css" rel="stylesheet" type="text/css">
+
+        <!-- Vimeo -->
+        <script src="https://player.vimeo.com/api/player.js"></script>
+
+        <!-- Load in plugins for running experiments online -->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script> <!-- MUST add jquery to run online! -->
+        <script type="text/javascript" src='jspsych-6.3.1/plugins/jspsych-pavlovia.js'></script>
+   
+        <!-- Plugins -->
+        <script src="jspsych-6.3.1/plugins/jspsych-html-keyboard-response.js"></script>
+        <script src="jspsych-6.3.1/plugins/jspsych-html-button-response.js"></script>
+        <script src="jspsych-6.3.1/plugins/jspsych-image-keyboard-response.js"></script>
+        <script src="jspsych-6.3.1/plugins/jspsych-custom-labels-response.js"></script>
+        <script src="jspsych-6.3.1/plugins/jspsych-custom-grid-response.js"></script>
+        <script src="jspsych-6.3.1/plugins/jspsych-survey-demo.js"></script>
+        <script src="jspsych-6.3.1/plugins/jspsych-instructions.js"></script>
+        <script src="jspsych-6.3.1/plugins/jspsych-survey-text.js"></script>
+        <script src="jspsych-6.3.1/plugins/jspsych-survey-text-numberonly.js"></script>
+        
+        <!-- Video Info -->
+         <script src="actor-video-info/01-video-info.js"></script>
+         <script src="actor-video-info/02-video-info.js"></script>
+         <script src="actor-video-info/03-video-info.js"></script>
+         <script src="actor-video-info/04-video-info.js"></script>
+         <script src="actor-video-info/05-video-info.js"></script>
+         <script src="actor-video-info/06-video-info.js"></script>
+         <script src="actor-video-info/07-video-info.js"></script>
+         <script src="actor-video-info/08-video-info.js"></script>
+         <script src="actor-video-info/09-video-info.js"></script>
+         <script src="actor-video-info/10-video-info.js"></script>
+         <script src="actor-video-info/11-video-info.js"></script>
+         <script src="actor-video-info/12-video-info.js"></script>
+         <script src="actor-video-info/13-video-info.js"></script>
+         <script src="actor-video-info/14-video-info.js"></script>
+         
+        <!-- Scripts -->
+        <script src="pages/function-randomize-emotion.js"></script>
+        <script src="pages/error.js"></script>
+        <script src="pages/glossary.js"></script>
+        <!-- <script src="pages/tom.js"></script> -->
+        <script src="pages/thankyou.js"></script>
+
+    </head>
+    <body></body>
+    
+    <!-- Define variables first -->
+    <script> 
+
+    // Experiment Parameters
+    var exp_id = '1'                // Ranges from 1 to 7 and determines which actors they see
+    var exp_ab = 'A'                // A = labels first; B = grid first
+    var pid = 'ERROR'               // Prolific ID
+    var attention_failures = 0      // for attention checks
+    var start_time = Date.now()
+
+    // Initialize variables 
+    var labels_variables = ''
+    var grid_variables   = ''
+    var timeline         = []
+
+    // Run style
+    var ONLINE = true       // true or false
+    var PAVLOVIA = true     // true or false
+
+    if (ONLINE) {
+    // If running on Pavlovia, read URL parameter values from the link sent to participant.
+    // URL example: https://run.pavlovia.org/neurophilmcgill/narratives-exp/?CONDITION=NAR&GROUP=1&SESSION=1&PID=YOURNAME
+        var urlvar = jsPsych.data.urlVariables();
+        exp_id = urlvar.EXPID
+        exp_ab = urlvar.EXPAB
+        pid = urlvar.PID
+        // CONDITION = $.urlParam('CONDITION');
+    };
+
+    if (exp_id == '1'){
+        labels_variables = shuffle(video_info_08.concat(video_info_02))
+        grid_variables   = shuffle(video_info_09.concat(video_info_04))
+
+        // console.log(labels_variables);
+        // console.log(video_info_08, video_info_02); 
+    } 
+    else if (exp_id == '2'){
+        labels_variables = shuffle(video_info_12_np.concat(video_info_14))
+        grid_variables   = shuffle(video_info_03.concat(video_info_01))
+    } 
+    else if (exp_id == '3'){
+        labels_variables = shuffle(video_info_11.concat(video_info_03))
+        grid_variables   = shuffle(video_info_06.concat(video_info_12))
+    }
+    else if (exp_id == '4'){
+        labels_variables = shuffle(video_info_04.concat(video_info_09))
+        grid_variables   = shuffle(video_info_02.concat(video_info_08))
+    }
+    else if (exp_id == '5'){
+        labels_variables = shuffle(video_info_10.concat(video_info_05))
+        grid_variables   = shuffle(video_info_07.concat(video_info_13))
+    }
+    else if (exp_id == '6'){
+        labels_variables = shuffle(video_info_13.concat(video_info_06))
+        grid_variables   = shuffle(video_info_05.concat(video_info_11))
+    }
+    else if (exp_id == '7'){
+        labels_variables = shuffle(video_info_01.concat(video_info_07))
+        grid_variables   = shuffle(video_info_14.concat(video_info_10))
+    }
+
+    </script>
+
+
+
+
+    <!-- Load plugin (requires variables to be defined first) -->
+    <script src="pages/tom.js"></script>
+    <script src="pages/demographics-internetspeed-screening.js"></script>
+    <script src="pages/welcome-consent.js"></script>
+    
+
+
+
+    <script>
+    if (exp_ab == 'A'){
+        timeline = timeline.concat(WELCOMECONSENT)
+        timeline = timeline.concat(DEMOGRAPHICS)
+        timeline = timeline.concat(TOM_LABELS)
+        timeline = timeline.concat(between_trials_countdown)
+        timeline = timeline.concat(TOM_GRID)
+        timeline = timeline.concat(THANKYOU)
+    }
+    else if (exp_ab == 'B'){
+        timeline = timeline.concat(WELCOMECONSENT)
+        timeline = timeline.concat(DEMOGRAPHICS)
+        timeline = timeline.concat(TOM_GRID)
+        timeline = timeline.concat(between_trials_countdown)
+        timeline = timeline.concat(TOM_LABELS)
+        timeline = timeline.concat(THANKYOU)
+    }
+    else {
+        timeline = timeline.concat(ERROR)
+    }
+
+    // for running online through Pavlovia
+    var pavlovia_init = {
+        type: "pavlovia",
+        command: "init"
+    };
+    var pavlovia_finish = {
+        type: "pavlovia",
+        command: "finish"
+    };
+
+    if (PAVLOVIA){
+        timeline.unshift(pavlovia_init)
+        timeline.push(pavlovia_finish)
+    }
+
+    jsPsych.init({
+        timeline: timeline,
+        on_finish: function() {
+            jsPsych.data.displayData();
+            jsPsych.data.get().localSave('csv', 'experiment_data.csv');
+        }
+    })
+
+    </script>
+</html>
