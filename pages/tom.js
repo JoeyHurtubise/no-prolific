@@ -57,7 +57,7 @@ var mask = {
 var labels_instructions = {
   type: 'instructions',
   pages: [
-    '<div style="width: 1000px; height: 200px"><p>This test will investigate your ability to read emotion from an expression.</p><p>You will be shown a short video demonstrating an expression, and then four emotion labels for you to select the one that best describes the emotion that the face was showing. Please provide one best guess for each item.</p><p>Click on <strong>Next</strong> to see an example.</p></div>',
+    '<div style="width: 1000px; height: 200px"><p>This test will investigate your ability to read emotion from an expression.</p><p>You will be shown a short video demonstrating an expression. Following this, you will be shown four labels and you should select the one that best describes the emotion that was represented in the video. Please provide one best guess for each item.</p><p>Click on <strong>Next</strong> to see an example.</p></div>',
     '<div style="width: 1000px; height: 600px;"> \
     <p>Here is an example of a video and four possible emotion labels. Clicking on <span style="color: red; font-weight: bold;">doubtful</span> would mean that you consider this video to correspond best to that emotion.</p> \
     <div style="display: flex; align-items: center; justify-content: space-between;"> \
@@ -153,8 +153,8 @@ var between_trials_countdown = {
   type: 'html-button-response',
   stimulus: 'You have completed the first part of the experiment.'
     + '<br> Please take a five-minute break before moving on to the next trial.'
-    + '<p> Feel free to walk around the room and stretch. Just please make sure to get back'
-    + '<br> in 5 minutes. Press <b>Continue</b> to proceed with the experiment.'
+    + '<p> Feel free to walk around the room and stretch. However, please make sure to return to the task'
+    + '<br> within 5 minutes. Press <b>Continue</b> to proceed with the experiment.'
     + '<p><span id="clock">5:00</span>',
   choices: ['Continue'],
   on_load: function(){
@@ -208,7 +208,7 @@ var grid_practice = {
 
 var grid_instructions_again = {
   type: 'html-button-response',
-  stimulus: '<div style="width: 1000px; height: 70px"><p>You will now be shown a series of short videos. Please identify an appropriate location in the grid for the emotion expressed by the facial expression as you did before in the practice trials. Starting now, your responses will be recorded.</p><p>Click <strong>Continue</strong> to start. Good luck!</p></div>',
+  stimulus: '<div style="width: 1000px; height: 70px"><p>You will now be shown a series of short videos. Please identify an appropriate location in the grid for the emotion expressed as you did before in the practice trials. Starting now, your responses will be recorded.</p><p>Click <strong>Continue</strong> to start. Good luck!</p></div>',
   choices: ['Continue'],
   data: {trial:false},
   margin_vertical: '80px'
