@@ -314,19 +314,19 @@ var grid_procedure = {
 var grid_procedure_pt1 = {
   timeline: [fixation, video, mask, grid],
   // randomize_order: true,
-  timeline_variables: labels_variables.slice(0,20)
+  timeline_variables: grid_variables.slice(0,20)
 };
 
 var grid_procedure_pt2 = {
   timeline: [fixation, video, mask, grid],
   // randomize_order: true,
-  timeline_variables: labels_variables.slice(20,50)
+  timeline_variables: grid_variables.slice(20,50)
 };
 
 var grid_procedure_pt3 = {
   timeline: [fixation, video, mask, grid],
   // randomize_order: true,
-  timeline_variables: labels_variables.slice(50,186)
+  timeline_variables: grid_variables.slice(50,186)
 };
 
 // Define an alternate timeline if they fail 2 attention checks
