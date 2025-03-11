@@ -9,9 +9,7 @@ var video = {
   type: 'html-keyboard-response',
   stimulus: function() {
       // Replace the URL dynamically
-      return `
-          <div style="text-align: center;">
-              <p style="font-size: 20px; font-weight: bold;">Video:${jsPsych.timelineVariable('name')}</p>
+      return `    
           <div style="display: flex; align-items: center; justify-content: center; height: 100vh;">
               <iframe id="vimeo-player" 
                       src="${jsPsych.timelineVariable('player_embed_url')}&autoplay=1&muted=1&controls=0&loop=0&title=0&byline=0&portrait=0&playsinline=1&keyboard=0" 
