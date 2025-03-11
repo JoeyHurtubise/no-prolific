@@ -85,9 +85,9 @@ var labels = {
     return emotion_array(target_emn);
   },
   data: {
-      trial: 'tom-labels',
-      actor: jsPsych.timelineVariable('actor'),
-      target_emotion: jsPsych.timelineVariable('target_emotion')
+    trial: 'tom-labels',
+    actor: jsPsych.timelineVariable('actor'),
+    target_emotion: jsPsych.timelineVariable('target_emotion')
   }
 };
 
@@ -97,6 +97,11 @@ var grid = {
   stimulus: "Please locate the emotion in an appropriate spot in the grid by pointing and clicking the mouse.<br>Press the <b>space bar</b> when you\'re ready to continue.<br><br>",
   grid_height: 300,
   maintain_aspect_ratio: true,
+  data: {
+    trial: 'tom-grid',
+    actor: jsPsych.timelineVariable('actor'),
+    target_emotion: jsPsych.timelineVariable('target_emotion')
+  }
 }
 
 var labels_practice = {
