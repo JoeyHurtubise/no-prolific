@@ -102,8 +102,23 @@ var grid = {
   }
 }
 
+var labels_practice_trial = {
+  type: "custom-labels-response",
+  stimulus: 'What emotion was the face showing?<br><br>',
+  choices: function() {
+    let target_emn = jsPsych.timelineVariable('target_emotion');
+    // console.log("Target emotion:", target_emn);  // Debugging
+    return emotion_array(target_emn);
+  },
+  data: {
+    trial: 'tom-labels-practice',
+    actor: jsPsych.timelineVariable('actor'),
+    target_emotion: jsPsych.timelineVariable('target_emotion')
+  }
+};
+
 var labels_practice = {
-  timeline: [labels_instructions, fixation, video, mask, labels],
+  timeline: [labels_instructions, fixation, video, mask, labels_practice_trial],
   randomize_order: false,
   timeline_variables: [{
     "name": "12_distrustful_3sec",
@@ -198,8 +213,21 @@ var grid_instructions = {
   show_clickable_nav: true
 }
 
+var grid_practice_trial = {
+  type: 'html-custom-grid-response',
+  around_grid: 'labels',
+  stimulus: "Please locate the emotion in an appropriate spot in the grid by pointing and clicking the mouse.<br>Press the <b>space bar</b> when you\'re ready to continue.<br><br>",
+  grid_height: 300,
+  maintain_aspect_ratio: true,
+  data: {
+    trial: 'tom-grid-practice',
+    actor: jsPsych.timelineVariable('actor'),
+    target_emotion: jsPsych.timelineVariable('target_emotion')
+  }
+}
+
 var grid_practice = {
-  timeline: [grid_instructions, fixation, video, mask, grid],
+  timeline: [grid_instructions, fixation, video, mask, grid_practice_trial],
   randomize_order: false,
   timeline_variables: [{
     "name": "12_distrustful_3sec",
