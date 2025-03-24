@@ -8,7 +8,10 @@ var welcome = {
         EXP_ID: exp_id,
         EXP_AB: exp_ab,
         ATTENTION_FAILURES: attention_failures
-    }
+    },
+    on_finish: function () {
+        jsPsych.setProgressBar(0)
+      }
 }
 
 consent_text =  '<div style="text-align: left; margin: 50px 80px -60px 80px;">'
@@ -31,7 +34,10 @@ var consent = {
     stimulus: consent_text,
     choices: ['I consent'],
     data: {trial:false},
-    margin_vertical: '80px'
+    margin_vertical: '80px',
+    on_finish: function () {
+        jsPsych.setProgressBar(jsPsych.getProgressBarCompleted() + (1 / PROGRESS_BAR_N))
+      }
 }
 
 var WELCOMECONSENT = [welcome, consent];

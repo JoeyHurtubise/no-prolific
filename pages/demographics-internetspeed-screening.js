@@ -4,7 +4,10 @@ var demographics = {
         trial:'demo',
         PID: pid,
         START_TIME: start_time
-    }
+    },
+    on_finish: function () {
+        jsPsych.setProgressBar(jsPsych.getProgressBarCompleted() + (1 / PROGRESS_BAR_N))
+      }
 };
 
 var internet_screened_out = {

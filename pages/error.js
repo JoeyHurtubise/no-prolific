@@ -1,12 +1,24 @@
-var ERROR = {
+var ERROR_expab = {
     type: 'html-button-response',
-    stimulus: 'An error has occurred. Please contact experimenter.',
+    stimulus: 'An error has occurred. The experiment type is not defined. Please contact the experimenter and give them the error code "EXPAB".',
+    choices: ['<strong>Okay</strong>']
+}
+
+var ERROR_expid = {
+    type: 'html-button-response',
+    stimulus: 'An error has occurred. The experiment type is not defined. Please contact the experimenter and give them the error code "EXPID".',
     choices: ['<strong>Okay</strong>']
 }
 
 var ERROR_pid = {
     type: 'html-button-response',
     stimulus: 'The participant ID in your provided experiment URL is incorrect. Please contact experimenter.',
+    choices: ['<strong>Okay</strong>']
+}
+
+var ERROR = {
+    type: 'html-button-response',
+    stimulus: 'An error has occurred. Please contact experimenter.',
     choices: ['<strong>Okay</strong>']
 }
 

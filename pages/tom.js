@@ -40,7 +40,7 @@ var video = {
           console.error('Vimeo Player Error:', error);
           jsPsych.finishTrial(); // End the trial to prevent the experiment from stalling
       });
-  }
+    },
 };
 
 var mask = {
@@ -86,6 +86,9 @@ var labels = {
     trial: 'tom-labels',
     actor: jsPsych.timelineVariable('actor'),
     target_emotion: jsPsych.timelineVariable('target_emotion')
+  },
+  on_finish: function () {
+    jsPsych.setProgressBar(jsPsych.getProgressBarCompleted() + (1 / PROGRESS_BAR_N))
   }
 };
 
@@ -99,6 +102,9 @@ var grid = {
     trial: 'tom-grid',
     actor: jsPsych.timelineVariable('actor'),
     target_emotion: jsPsych.timelineVariable('target_emotion')
+  },
+  on_finish: function () {
+    jsPsych.setProgressBar(jsPsych.getProgressBarCompleted() + (1 / PROGRESS_BAR_N))
   }
 }
 
@@ -129,13 +135,13 @@ var labels_practice = {
   }]
 };
 
-var labels_attention_check = {
+var labels_attention_check1 = {
   type: "custom-labels-response",
-  stimulus: 'If you are paying attention, please select <strong>Annoyed</strong>.<br>',
-  choices: ['Doubtful', 'Hostile', 'Annoyed', 'Disappointed'],
+  stimulus: 'This is an attention check, please press on the label that says <strong>Click</strong>.<br>',
+  choices: ['Do not click', 'Click', 'Do not click', 'Do not click'],
   on_finish: function(data) {
     // Check if the participant selected "annoyed"
-    var passed = (data.response === "annoyed");
+    var passed = (data.response === "Click");
 
     // Update failure count if they fail
     if (!passed) {
@@ -144,17 +150,41 @@ var labels_attention_check = {
     trial: 'attention-check',
     actor: jsPsych.timelineVariable('actor'),
     target_emotion: jsPsych.timelineVariable('target_emotion'),
+  },
+  on_finish: function () {
+    jsPsych.setProgressBar(jsPsych.getProgressBarCompleted() + (1 / PROGRESS_BAR_N))
+  }
+};
+
+var labels_attention_check2 = {
+  type: "custom-labels-response",
+  stimulus: 'This is an attention check, please press on the label that says <strong>Click</strong>.<br>',
+  choices: ['Do not click', 'Do not click', 'Do not click', 'Click'],
+  on_finish: function(data) {
+    // Check if the participant selected "annoyed"
+    var passed = (data.response === "Click");
+
+    // Update failure count if they fail
+    if (!passed) {
+      attention_failures += 1}},
+  data: {
+    trial: 'attention-check',
+    actor: jsPsych.timelineVariable('actor'),
+    target_emotion: jsPsych.timelineVariable('target_emotion'),
+  },
+  on_finish: function () {
+    jsPsych.setProgressBar(jsPsych.getProgressBarCompleted() + (1 / PROGRESS_BAR_N))
   }
 };
 
 var labels_attention_check_procedure1 = {
-  timeline: [fixation, video, mask, labels_attention_check],
+  timeline: [fixation, video, mask, labels_attention_check1],
   randomize_order: false,
   timeline_variables: labels_variables.slice(5,6)
 };
 
 var labels_attention_check_procedure2 = {
-  timeline: [fixation, video, mask, labels_attention_check],
+  timeline: [fixation, video, mask, labels_attention_check2],
   randomize_order: false,
   timeline_variables: labels_variables.slice(30,31)
 };
@@ -248,7 +278,7 @@ var grid_instructions_again = {
 var grid_attention_check1 = {
   type: 'html-custom-grid-response',
   around_grid: 'labels',
-  stimulus: "If you are paying attention, please click anywhere in the <strong>bottom left quadrant</strong>.<br>Press the <b>space bar</b> when you\'re ready to continue.<br><br>",
+  stimulus: "If you are paying attention, please click anywhere in the <span style='color: #ff0000;'><strong>bottom left quadrant</strong></span>.<br>Press the <b>space bar</b> when you\'re ready to continue.<br><br>",
   grid_height: 300,
   maintain_aspect_ratio: true,
   on_finish: function(data) {
@@ -267,13 +297,16 @@ var grid_attention_check1 = {
     trial: 'attention-check',
     actor: jsPsych.timelineVariable('actor'),
     target_emotion: jsPsych.timelineVariable('target_emotion'),
+  },
+  on_finish: function () {
+    jsPsych.setProgressBar(jsPsych.getProgressBarCompleted() + (1 / PROGRESS_BAR_N))
   }
 }
 
 var grid_attention_check2 = {
   type: 'html-custom-grid-response',
   around_grid: 'labels',
-  stimulus: "If you are paying attention, please click anywhere in the <strong>top left quadrant</strong>.<br>Press the <b>space bar</b> when you\'re ready to continue.<br><br>",
+  stimulus: "If you are paying attention, please click anywhere in the <span style='color: #ff0000;'><strong>top left quadrant</strong></span>.<br>Press the <b>space bar</b> when you\'re ready to continue.<br><br>",
   grid_height: 300,
   maintain_aspect_ratio: true,
   on_finish: function(data) {
@@ -292,6 +325,9 @@ var grid_attention_check2 = {
     trial: 'attention-check',
     actor: jsPsych.timelineVariable('actor'),
     target_emotion: jsPsych.timelineVariable('target_emotion'),
+  },
+  on_finish: function () {
+    jsPsych.setProgressBar(jsPsych.getProgressBarCompleted() + (1 / PROGRESS_BAR_N))
   }
 }
 

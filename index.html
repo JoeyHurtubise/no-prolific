@@ -58,7 +58,6 @@
         <script src="pages/function-randomize-emotion.js"></script>
         <script src="pages/error.js"></script>
         <script src="pages/glossary.js"></script>
-        <!-- <script src="pages/tom.js"></script> -->
         <script src="pages/thankyou.js"></script>
 
     </head>
@@ -70,9 +69,10 @@
     // Experiment Parameters
     var exp_id = 0                  // Ranges from 1 to 7 and determines which actors they see
     var exp_ab = 0                  // A = labels first; B = grid first
-    var pid = 'ERROR'               // Prolific ID
+    var pid = 'ERROR'                // Prolific ID
     var attention_failures = 0      // for attention checks
     var start_time = Date.now()
+    var PROGRESS_BAR_N = 379        
 
     // Initialize variables 
     var labels_variables = ''
@@ -80,8 +80,9 @@
     var timeline         = []
 
     // Run style
-    var ONLINE = true       // true or false
-    var PAVLOVIA = true     // true or false
+    // if running offline (on computer), you need to change exp_id and exp_ab or else it will throw an error
+    var ONLINE = true        // true or false
+    var PAVLOVIA = true      // true or false
 
     if (ONLINE) {
     // If running on Pavlovia, read URL parameter values from the link sent to participant.
@@ -124,7 +125,9 @@
         labels_variables = shuffle(video_info_01.concat(video_info_07))
         grid_variables   = shuffle(video_info_14.concat(video_info_10))
     }
-
+    else {
+        timeline = timeline.concat(ERROR_expid)
+    }
     </script>
 
 
@@ -156,7 +159,7 @@
         timeline = timeline.concat(THANKYOU)
     }
     else {
-        timeline = timeline.concat(ERROR)
+        timeline = timeline.concat(ERROR_expab)
     }
 
     // for running online through Pavlovia
@@ -179,7 +182,9 @@
         on_finish: function() {
             jsPsych.data.displayData();
             jsPsych.data.get().localSave('csv', 'experiment_data.csv');
-        }
+        },
+        show_progress_bar: true,
+        auto_update_progress_bar: false,
     })
 
     </script>
