@@ -189,6 +189,12 @@ var labels_attention_check_procedure2 = {
   timeline_variables: labels_variables.slice(30,31)
 };
 
+var labels_attention_check_procedure3 = {
+  timeline: [fixation, video, mask, labels_attention_check1],
+  randomize_order: false,
+  timeline_variables: labels_variables.slice(70,71)
+};
+
 var labels_instructions_again = {
   type: 'html-button-response',
   stimulus: '<div style="width: 1000px; height: 45px"><p>You will now be shown a series of short videos. Please select the label that best describes the emotion that the face was showing. Please provide one best guess for each item. Starting now, your responses will be recorded.</p><p>Click <strong>Continue</strong> to start. Good luck!</p></div>',
@@ -205,6 +211,7 @@ var between_trials_countdown = {
     + '<br> within 5 minutes. Press <b>Continue</b> to proceed with the experiment.'
     + '<p><span id="clock">5:00</span>',
   choices: ['Continue'],
+  trial_duration: break_threshold,    // defined in index.html
   on_load: function(){
     var wait_time = 5 * 60 * 1000; // in milliseconds
     var start_time = performance.now();
@@ -220,8 +227,27 @@ var between_trials_countdown = {
         document.querySelector('button').disabled = false;
         clearInterval(interval);
     }
-    }, 250)
-  }}
+    }, 250)},
+     on_finish: function(data) {
+      var too_long = (data.response === null);
+      
+      // If they took too long during the break, set break_timed_out to true (var defined in index.html)
+      if (too_long) {
+        break_timed_out = true}},
+  }
+
+var grid_practice_trial = {
+  type: 'html-custom-grid-response',
+  around_grid: 'labels',
+  stimulus: "Please locate the emotion in an appropriate spot in the grid by pointing and clicking the mouse.<br>Press the <b>space bar</b> when you\'re ready to continue.<br><br>",
+  grid_height: 300,
+  maintain_aspect_ratio: true,
+  data: {
+    trial: 'tom-grid-practice',
+    actor: jsPsych.timelineVariable('actor'),
+    target_emotion: jsPsych.timelineVariable('target_emotion')
+  }
+}
 
 var grid_instructions = {
   type: 'instructions',
@@ -243,18 +269,6 @@ var grid_instructions = {
   show_clickable_nav: true
 }
 
-var grid_practice_trial = {
-  type: 'html-custom-grid-response',
-  around_grid: 'labels',
-  stimulus: "Please locate the emotion in an appropriate spot in the grid by pointing and clicking the mouse.<br>Press the <b>space bar</b> when you\'re ready to continue.<br><br>",
-  grid_height: 300,
-  maintain_aspect_ratio: true,
-  data: {
-    trial: 'tom-grid-practice',
-    actor: jsPsych.timelineVariable('actor'),
-    target_emotion: jsPsych.timelineVariable('target_emotion')
-  }
-}
 
 var grid_practice = {
   timeline: [grid_instructions, fixation, video, mask, grid_practice_trial],
@@ -343,58 +357,74 @@ var grid_attention_check_procedure2 = {
   timeline_variables: grid_variables.slice(30,31)
 };
 
-// ==========
-
-// labels_variables = video_info_01  // default -- testing only -- TODO
-// grid_variables = video_info_01    // default -- testing only -- TODO
-
-var labels_procedure = {
-  timeline: [fixation, video, mask, labels],
-  randomize_order: true,
-  timeline_variables: labels_variables
+var grid_attention_check_procedure3 = {
+  timeline: [fixation, video, mask, grid_attention_check1],
+  randomize_order: false,
+  timeline_variables: grid_variables.slice(50,51)
 };
+
+// ==========
 
 var labels_procedure_pt1 = {
   timeline: [fixation, video, mask, labels],
-  // randomize_order: true,
-  timeline_variables: labels_variables.slice(0,20)
+  timeline_variables: labels_variables.slice(0,40) // 40 videos > AC 
 };
 
 var labels_procedure_pt2 = {
   timeline: [fixation, video, mask, labels],
-  // randomize_order: true,
-  timeline_variables: labels_variables.slice(20,50)
+  timeline_variables: labels_variables.slice(40,62) // AC > 22 videos > break
 };
 
 var labels_procedure_pt3 = {
   timeline: [fixation, video, mask, labels],
-  // randomize_order: true,
-  timeline_variables: labels_variables.slice(50,186)
+  timeline_variables: labels_variables.slice(62,92) // break > 30 videos > AC
 };
 
-var grid_procedure = {
-  timeline: [fixation, video, mask, grid],
-  randomize_order: true,
-  timeline_variables: grid_variables
+var labels_procedure_pt4 = {
+  timeline: [fixation, video, mask, labels],
+  timeline_variables: labels_variables.slice(92, 124) // AC > 32 videos > break
+};
+
+var labels_procedure_pt5 = {
+  timeline: [fixation, video, mask, labels],
+  timeline_variables: labels_variables.slice(124, 154) // break > 30 videos > AC
+};
+
+var labels_procedure_pt6 = {
+  timeline: [fixation, video, mask, labels],
+  timeline_variables: labels_variables.slice(154, 186) // AC > 32 videos 
 };
 
 var grid_procedure_pt1 = {
   timeline: [fixation, video, mask, grid],
-  // randomize_order: true,
-  timeline_variables: grid_variables.slice(0,20)
+  timeline_variables: grid_variables.slice(0,40) // 40 videos > AC 
 };
 
 var grid_procedure_pt2 = {
   timeline: [fixation, video, mask, grid],
-  // randomize_order: true,
-  timeline_variables: grid_variables.slice(20,50)
+  timeline_variables: grid_variables.slice(40,62) // AC > 22 videos > break
 };
 
 var grid_procedure_pt3 = {
   timeline: [fixation, video, mask, grid],
-  // randomize_order: true,
-  timeline_variables: grid_variables.slice(50,186)
+  timeline_variables: grid_variables.slice(62,92) // break > 30 videos > AC
 };
+
+var grid_procedure_pt4 = {
+  timeline: [fixation, video, mask, grid],
+  timeline_variables: grid_variables.slice(92, 124) // AC > 32 videos > break
+};
+
+var grid_procedure_pt5 = {
+  timeline: [fixation, video, mask, grid],
+  timeline_variables: grid_variables.slice(124, 154) // break > 30 videos > AC
+};
+
+var grid_procedure_pt6 = {
+  timeline: [fixation, video, mask, grid],
+  timeline_variables: grid_variables.slice(154, 186) // AC > 32 videos 
+};
+
 
 // Define an alternate timeline if they fail 2 attention checks
 var attention_screened_out = {
@@ -414,24 +444,44 @@ var attention_screened_out = {
     }
   };
 
+// Define an alternate timeline if they take too long during their break
+var break_screened_out = {
+  type: 'html-button-response',
+  stimulus: '<div style="text-align: center; width: 800px; margin: auto"><h3>Thank you for participating!</h1><p>You exceeded the time limit for the break and you have been timed out of this study due to inactivity. You will be compensated for the time you have spent on this study by bonus/partial payment. Thank you for your time.</p><p>You will be automatically redirected to Prolific upon clicking <strong>Complete Experiment</strong>.</p><p>Please <strong>DO NOT</strong> close this tab until you have been redirected to Prolific. Please take note of your Prolific Completion Code: <strong>XXXXX</strong>.</p></div>',
+  choices: ['Complete Experiment'],
+  on_finish: function() {
+      jsPsych.endExperiment("Timed out due to exceeding the provided break time (inactivity).");
+      }
+  };
+
+  // Define a conditional node to check if break time was too long
+  var check_break = {
+  timeline: [break_screened_out],
+  conditional_function: function() {
+      return break_timed_out;
+    }
+  };
+
 var TOM_LABELS = [
   labels_practice, 
   labels_instructions_again, 
-  labels_procedure_pt1, 
-  labels_attention_check_procedure1, check_attention_failures, 
-  labels_procedure_pt2,
-  labels_attention_check_procedure2, check_attention_failures, 
-  labels_procedure_pt3,
+  labels_procedure_pt1, labels_attention_check_procedure1, check_attention_failures, 
+  labels_procedure_pt2, between_trials_countdown,
+  labels_procedure_pt3, labels_attention_check_procedure2, check_attention_failures, 
+  labels_procedure_pt4, between_trials_countdown,
+  labels_procedure_pt5, labels_attention_check_procedure3, check_attention_failures, 
+  labels_procedure_pt6
 ]
 
 var TOM_GRID = [
   grid_practice, 
   grid_instructions_again, 
-  grid_procedure_pt1, 
-  grid_attention_check_procedure1, check_attention_failures, 
-  grid_procedure_pt2, 
-  grid_attention_check_procedure2, check_attention_failures, 
-  grid_procedure_pt3,
+  grid_procedure_pt1, grid_attention_check_procedure1, check_attention_failures, 
+  grid_procedure_pt2, between_trials_countdown,
+  grid_procedure_pt3, grid_attention_check_procedure2, check_attention_failures, 
+  grid_procedure_pt4, between_trials_countdown,
+  grid_procedure_pt5, grid_attention_check_procedure3, check_attention_failures, 
+  grid_procedure_pt6
 ]
 
 // var video_testing = {

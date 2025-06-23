@@ -5,7 +5,6 @@ var welcome = {
     data: {
         PID: pid,
         START_TIME: start_time,
-        EXP_ID: exp_id,
         EXP_AB: exp_ab,
         ATTENTION_FAILURES: attention_failures
     },

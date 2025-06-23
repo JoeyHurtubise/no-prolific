@@ -53,12 +53,12 @@
          <script src="actor-video-info/12-video-info.js"></script>
          <script src="actor-video-info/13-video-info.js"></script>
          <script src="actor-video-info/14-video-info.js"></script>
+         <script src="actor-video-info/selected-video-info.js"></script>
          
         <!-- Scripts -->
-        <script src="pages/function-randomize-emotion.js"></script>
         <script src="pages/error.js"></script>
         <script src="pages/glossary.js"></script>
-        <script src="pages/thankyou.js"></script>
+        <script src="pages/function-randomize-emotion.js"></script>
 
     </head>
     <body></body>
@@ -67,12 +67,13 @@
     <script> 
 
     // Experiment Parameters
-    var exp_id = 0                  // Ranges from 1 to 7 and determines which actors they see
-    var exp_ab = 0                  // A = labels first; B = grid first
-    var pid = 'ERROR'                // Prolific ID
-    var attention_failures = 0      // for attention checks
+    var exp_ab = 'A'                        // A = labels; B = grid 
+    var pid = 'ERROR'                       // Prolific ID
+    var attention_failures = 0              // for attention checks
+    var break_threshold = 5.5 * 60 * 1000   // for how long to give participant before break times out in ms (set to null for indefinite time)
+    var break_timed_out = false             // for breaks
     var start_time = Date.now()
-    var PROGRESS_BAR_N = 379        
+    var PROGRESS_BAR_N = 187                // 186 emotions + 1 for demographics     
 
     // Initialize variables 
     var labels_variables = ''
@@ -86,81 +87,50 @@
 
     if (ONLINE) {
     // If running on Pavlovia, read URL parameter values from the link sent to participant.
-    // URL example: https://run.pavlovia.org/neurophilmcgill/narratives-exp/?EXPID=1&EXPAB=1&PID=YOURNAME
+    // URL example: https://run.pavlovia.org/neurophilmcgill/narratives-exp/?EXPAB=A&PID=YOURNAME
         var urlvar = jsPsych.data.urlVariables();
-        exp_id = urlvar.EXPID
         exp_ab = urlvar.EXPAB
         pid = urlvar.PID
         // CONDITION = $.urlParam('CONDITION');
     };
 
-    if (exp_id == '1'){
-        labels_variables = shuffle(video_info_08.concat(video_info_02))
-        grid_variables   = shuffle(video_info_09.concat(video_info_04))
 
-        // console.log(labels_variables);
-        // console.log(video_info_08, video_info_02); 
-    } 
-    else if (exp_id == '2'){
-        labels_variables = shuffle(video_info_12_np.concat(video_info_14))
-        grid_variables   = shuffle(video_info_03.concat(video_info_01))
-    } 
-    else if (exp_id == '3'){
-        labels_variables = shuffle(video_info_11.concat(video_info_03))
-        grid_variables   = shuffle(video_info_06.concat(video_info_12))
-    }
-    else if (exp_id == '4'){
-        labels_variables = shuffle(video_info_04.concat(video_info_09))
-        grid_variables   = shuffle(video_info_02.concat(video_info_08))
-    }
-    else if (exp_id == '5'){
-        labels_variables = shuffle(video_info_10.concat(video_info_05))
-        grid_variables   = shuffle(video_info_07.concat(video_info_13))
-    }
-    else if (exp_id == '6'){
-        labels_variables = shuffle(video_info_13.concat(video_info_06))
-        grid_variables   = shuffle(video_info_05.concat(video_info_11))
-    }
-    else if (exp_id == '7'){
-        labels_variables = shuffle(video_info_01.concat(video_info_07))
-        grid_variables   = shuffle(video_info_14.concat(video_info_10))
-    }
-    else {
-        timeline = timeline.concat(ERROR_expid)
-    }
-    </script>
+    labels_variables = shuffle(video_info_selected)
+    grid_variables = labels_variables
 
 
+
+ </script>
 
 
     <!-- Load plugin (requires variables to be defined first) -->
     <script src="pages/tom.js"></script>
-    <script src="pages/demographics-internetspeed-screening.js"></script>
+    <script src="pages/thankyou.js"></script>
     <script src="pages/welcome-consent.js"></script>
-    
+    <script src="pages/demographics-internetspeed-screening.js"></script>
+
+
+<script>
 
 
 
-    <script>
     if (exp_ab == 'A'){
         timeline = timeline.concat(WELCOMECONSENT)
         timeline = timeline.concat(DEMOGRAPHICS)
         timeline = timeline.concat(TOM_LABELS)
-        timeline = timeline.concat(between_trials_countdown)
-        timeline = timeline.concat(TOM_GRID)
         timeline = timeline.concat(THANKYOU)
     }
     else if (exp_ab == 'B'){
         timeline = timeline.concat(WELCOMECONSENT)
         timeline = timeline.concat(DEMOGRAPHICS)
         timeline = timeline.concat(TOM_GRID)
-        timeline = timeline.concat(between_trials_countdown)
-        timeline = timeline.concat(TOM_LABELS)
         timeline = timeline.concat(THANKYOU)
     }
     else {
         timeline = timeline.concat(ERROR_expab)
     }
+
+
 
     // for running online through Pavlovia
     var pavlovia_init = {
