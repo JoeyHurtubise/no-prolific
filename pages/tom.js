@@ -203,12 +203,12 @@ var labels_instructions_again = {
   margin_vertical: '80px'
 }
 
-var between_trials_countdown = {
+var between_trials_countdown1 = {
   type: 'html-button-response',
   stimulus: 'You have completed the first part of the experiment.'
     + '<br> Please take a five-minute break before moving on to the next trial.'
     + '<p> Feel free to walk around the room and stretch. However, please make sure to return to the task'
-    + '<br> within 5 minutes. Press <b>Continue</b> to proceed with the experiment.'
+    + '<br> within 5 minutes, as extended delays may result in automatic withdrawal from the study.<br>Press <b>Continue</b> to proceed with the experiment.'
     + '<p><span id="clock">5:00</span>',
   choices: ['Continue'],
   trial_duration: break_threshold,    // defined in index.html
@@ -227,14 +227,49 @@ var between_trials_countdown = {
         document.querySelector('button').disabled = false;
         clearInterval(interval);
     }
-    }, 250)},
-     on_finish: function(data) {
-      var too_long = (data.response === null);
-      
-      // If they took too long during the break, set break_timed_out to true (var defined in index.html)
-      if (too_long) {
-        break_timed_out = true}},
-  }
+    }, 250)
+    },
+    on_finish: function(data) {
+    var too_long = (data.response === null);
+    
+    // If they took too long during the break, set break_timed_out to true (var defined in index.html)
+    if (too_long) {
+      break_timed_out = true}},
+}
+
+var between_trials_countdown2 = {
+  type: 'html-button-response',
+  stimulus: 'You have completed the second part of the experiment.'
+    + '<br> Please take a five-minute break before moving on to the next trial.'
+    + '<p> Feel free to walk around the room and stretch. However, please make sure to return to the task'
+    + '<br> within 5 minutes, as extended delays may result in automatic withdrawal from the study.<br>Press <b>Continue</b> to proceed with the experiment.'
+    + '<p><span id="clock">5:00</span>',
+  choices: ['Continue'],
+  trial_duration: break_threshold,    // defined in index.html
+  on_load: function(){
+    var wait_time = 5 * 60 * 1000; // in milliseconds
+    var start_time = performance.now();
+    // document.querySelector('button').disabled = true;
+    var interval = setInterval(function(){
+    var time_left = wait_time - (performance.now() - start_time);
+    var minutes = Math.floor(time_left / 1000 / 60);
+    var seconds = Math.floor((time_left - minutes*1000*60)/1000);
+    var seconds_str = seconds.toString().padStart(2,'0');
+    document.querySelector('#clock').innerHTML = minutes + ':' + seconds_str
+    if(time_left <= 0){
+        document.querySelector('#clock').innerHTML = "0:00";
+        document.querySelector('button').disabled = false;
+        clearInterval(interval);
+    }
+    }, 250)
+    },
+    on_finish: function(data) {
+    var too_long = (data.response === null);
+    
+    // If they took too long during the break, set break_timed_out to true (var defined in index.html)
+    if (too_long) {
+      break_timed_out = true}},
+}
 
 var grid_practice_trial = {
   type: 'html-custom-grid-response',
@@ -466,9 +501,9 @@ var TOM_LABELS = [
   labels_practice, 
   labels_instructions_again, 
   labels_procedure_pt1, labels_attention_check_procedure1, check_attention_failures, 
-  labels_procedure_pt2, between_trials_countdown,
+  labels_procedure_pt2, between_trials_countdown1,
   labels_procedure_pt3, labels_attention_check_procedure2, check_attention_failures, 
-  labels_procedure_pt4, between_trials_countdown,
+  labels_procedure_pt4, between_trials_countdown2,
   labels_procedure_pt5, labels_attention_check_procedure3, check_attention_failures, 
   labels_procedure_pt6
 ]
@@ -477,9 +512,9 @@ var TOM_GRID = [
   grid_practice, 
   grid_instructions_again, 
   grid_procedure_pt1, grid_attention_check_procedure1, check_attention_failures, 
-  grid_procedure_pt2, between_trials_countdown,
+  grid_procedure_pt2, between_trials_countdown1,
   grid_procedure_pt3, grid_attention_check_procedure2, check_attention_failures, 
-  grid_procedure_pt4, between_trials_countdown,
+  grid_procedure_pt4, between_trials_countdown2,
   grid_procedure_pt5, grid_attention_check_procedure3, check_attention_failures, 
   grid_procedure_pt6
 ]
