@@ -325,11 +325,13 @@ var grid_instructions_again = {
 }
 
 var grid_attention_check1 = {
-  type: 'html-custom-grid-response',
+  type: 'html-custom-grid-response-ac',
   around_grid: 'labels',
   stimulus: "If you are paying attention, please click anywhere in the <span style='color: #ff0000;'><strong>bottom left quadrant</strong></span>.<br>Press the <b>space bar</b> when you\'re ready to continue.<br><br>",
   grid_height: 300,
   maintain_aspect_ratio: true,
+  xcoord: 20,
+  ycoord: 230,
   on_finish: function(data) {
     var x = Number(data.x);
     var y = Number(data.y);
@@ -353,11 +355,13 @@ var grid_attention_check1 = {
 }
 
 var grid_attention_check2 = {
-  type: 'html-custom-grid-response',
+  type: 'html-custom-grid-response-ac',
   around_grid: 'labels',
   stimulus: "If you are paying attention, please click anywhere in the <span style='color: #ff0000;'><strong>top left quadrant</strong></span>.<br>Press the <b>space bar</b> when you\'re ready to continue.<br><br>",
   grid_height: 300,
   maintain_aspect_ratio: true,
+  xcoord: 20,
+  ycoord: 80,
   on_finish: function(data) {
     var x = Number(data.x);
     var y = Number(data.y);

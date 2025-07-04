@@ -1,19 +1,7 @@
-<!--
-    Emotion Recognition Study
-
-    Sophie Hoyer 2024.
-    Neurophilosophy Lab @ McGill University [https://www.neurophilosophylab.org].
-
-    This experiment was built using jsPsych v6.3.1:
-    de Leeuw, J.R., Gilbert, R.A., & Luchterhandt, B. (2023).
-    jsPsych: Enabling an open-source collaborative ecosystem of behavioral experiments. 
-    Journal of Open Source Software, 8(85), 5351, https://joss.theoj.org/papers/10.21105/joss.05351.
--->
-
 <!DOCTYPE html>
 <html>
     <head>
-        <title>Emotion Recognition Study</title>
+        <title>Sandbox</title>
         
         <!-- jsPsych and Stylesheet -->
         <script src="jspsych-6.3.1/jspsych.js"></script>
@@ -148,8 +136,52 @@
         timeline.push(pavlovia_finish)
     }
 
+    var griddy1 = {
+    type: 'html-custom-grid-response-ac',
+    around_grid: 'labels',
+    stimulus: "If you are paying attention, please click anywhere in the <span style='color: #ff0000;'><strong>bottom left quadrant</strong></span>.<br>Press the <b>space bar</b> when you\'re ready to continue.<br><br>",
+    grid_height: 300,
+    maintain_aspect_ratio: true,
+    xcoord: 20,
+    ycoord: 230,
+    on_finish: function(data) {
+        var x = Number(data.x);
+        var y = Number(data.y);
+        
+        // Check if the click was in the bottom left quadrant
+        var passed = (x < 0 && y < 0);
+
+        // Update global failure counter if they fail
+        if (!passed) {
+        attention_failures += 1;
+        }
+    }
+    }
+
+    var griddy2 = {
+    type: 'html-custom-grid-response-ac',
+    around_grid: 'labels',
+    stimulus: "If you are paying attention, please click anywhere in the <span style='color: #ff0000;'><strong>top left quadrant</strong></span>.<br>Press the <b>space bar</b> when you\'re ready to continue.<br><br>",
+    grid_height: 300,
+    maintain_aspect_ratio: true,
+    xcoord: 20,
+    ycoord: 80,
+    on_finish: function(data) {
+        var x = Number(data.x);
+        var y = Number(data.y);
+        
+        // Check if the click was in the top left quadrant
+        var passed = (x < 0 && y > 0);
+
+        // Update global failure counter if they fail
+        if (!passed) {
+        attention_failures += 1;
+        }
+    },
+    }
+
     jsPsych.init({
-        timeline: timeline,
+        timeline: [griddy1, griddy2],
         on_finish: function() {
             jsPsych.data.displayData();
             jsPsych.data.get().localSave('csv', 'experiment_data.csv');
