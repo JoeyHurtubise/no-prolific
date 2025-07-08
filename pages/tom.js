@@ -67,7 +67,7 @@ var labels_instructions = {
         allow="autoplay; fullscreen">\
       </iframe> \
     <img src="stimuli/instructions-labels.png" alt="instructions-labels" width="400"></div></div>',
-    '<p>Now you will be shown the glossary of the mental states used in this experiment.</p><p>Please read through the list and make sure to learn the definition of any mental states you are not familiar with.</p>Please note that you will not have access to the glossary during the rest of the experiment.<p>Click on <strong>Next</strong> to continue.</p.>',
+    '<p>Now you will be shown the glossary of the mental states used in this experiment.</p><p>Please read through the list and make sure to learn the definition of any mental states you are not familiar with.</p>Please note that you will not have access to the glossary during the experiment.<p>Click on <strong>Next</strong> to continue.</p.>',
     '<br><br><b>GLOSSARY FOR MENTAL STATES </b><br><br>' + emotion_definitions,
     '<p>Now we are going to do a practice trial.</p><p>You will be shown a short video. Then, the labels will be displayed for you to click on the one corresponding to the shown emotion.</p><p>Click on <strong>Next</strong> when you are ready to start. Once you click <strong>Next</strong>, you will not be able to go back.</p>'
     ],
@@ -269,6 +269,16 @@ var between_trials_countdown2 = {
     // If they took too long during the break, set break_timed_out to true (var defined in index.html)
     if (too_long) {
       break_timed_out = true}},
+}
+
+var post_break_glossary = {
+  type: 'instructions',
+  pages: [
+    '<p>You will now be shown the glossary of the mental states used in this experiment.</p><p>Please read through the list and make sure to learn the definition of any mental states you are not familiar with.</p>Please note that you will not have access to the glossary during the experiment.<p>Click on <strong>Next</strong> to continue.</p.>',
+    '<br><br><b>GLOSSARY FOR MENTAL STATES </b><br><br>' + emotion_definitions,
+    '<p>Click on <strong>Next</strong> when you are ready to resume the experiment. Once you click <strong>Next</strong>, you will not be able to go back.</p>'
+    ],
+  show_clickable_nav: true
 }
 
 var grid_practice_trial = {
@@ -505,9 +515,9 @@ var TOM_LABELS = [
   labels_practice, 
   labels_instructions_again, 
   labels_procedure_pt1, labels_attention_check_procedure1, check_attention_failures, 
-  labels_procedure_pt2, between_trials_countdown1,
+  labels_procedure_pt2, between_trials_countdown1, post_break_glossary,
   labels_procedure_pt3, labels_attention_check_procedure2, check_attention_failures, 
-  labels_procedure_pt4, between_trials_countdown2,
+  labels_procedure_pt4, between_trials_countdown2, post_break_glossary,
   labels_procedure_pt5, labels_attention_check_procedure3, check_attention_failures, 
   labels_procedure_pt6
 ]

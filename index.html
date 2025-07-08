@@ -83,8 +83,8 @@
 
     // Run style
     // if running offline (on computer), you need to change exp_ab or else it will throw an error
-    var ONLINE = true        // true or false
-    var PAVLOVIA = true      // true or false
+    var ONLINE = false        // true or false
+    var PAVLOVIA = false      // true or false
 
     if (ONLINE) {
     // If running on Pavlovia, read URL parameter values from the link sent to participant.
@@ -116,13 +116,13 @@
 
 
     if (exp_ab == 'A'){
-        timeline = timeline.concat(WELCOMECONSENT)
+        timeline = timeline.concat(WELCOMECONSENT_labels)
         timeline = timeline.concat(DEMOGRAPHICS)
         timeline = timeline.concat(TOM_LABELS)
         timeline = timeline.concat(THANKYOU)
     }
     else if (exp_ab == 'B'){
-        timeline = timeline.concat(WELCOMECONSENT)
+        timeline = timeline.concat(WELCOMECONSENT_grid)
         timeline = timeline.concat(DEMOGRAPHICS)
         timeline = timeline.concat(TOM_GRID)
         timeline = timeline.concat(THANKYOU)
