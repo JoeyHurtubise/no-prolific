@@ -312,11 +312,11 @@ var video_info_selected = [
     "target_emotion": "contented"
   },
   {
-    "name": "F1_contented",
-    "player_embed_url": "https://player.vimeo.com/video/1050616947?h=504b19212e",
+    "name": "F7_contented",
+    "player_embed_url": "https://player.vimeo.com/video/1050628979?h=0848b267c8",
     "width": 1920,
     "height": 1080,
-    "actor": "F1",
+    "actor": "F7",
     "target_emotion": "contented"
   },
   {
@@ -336,11 +336,11 @@ var video_info_selected = [
     "target_emotion": "convinced"
   },
   {
-    "name": "F1_curious",
-    "player_embed_url": "https://player.vimeo.com/video/1050617013?h=335d41267b",
+    "name": "F2_curious",
+    "player_embed_url": "https://player.vimeo.com/video/1050606930?h=ed3bdff391",
     "width": 1920,
     "height": 1080,
-    "actor": "F1",
+    "actor": "F2",
     "target_emotion": "curious"
   },
   {
@@ -400,11 +400,11 @@ var video_info_selected = [
     "target_emotion": "defiant"
   },
   {
-    "name": "F1_depressed",
-    "player_embed_url": "https://player.vimeo.com/video/1050617173?h=140a7d8579",
+    "name": "F3_depressed",
+    "player_embed_url": "https://player.vimeo.com/video/1050625641?h=39e15585d6",
     "width": 1920,
     "height": 1080,
-    "actor": "F1",
+    "actor": "F3",
     "target_emotion": "depressed"
   },
   {
@@ -432,11 +432,11 @@ var video_info_selected = [
     "target_emotion": "desire"
   },
   {
-    "name": "F1_despondent",
-    "player_embed_url": "https://player.vimeo.com/video/1050617266?h=4c8a8cc24a",
+    "name": "F2_despondent",
+    "player_embed_url": "https://player.vimeo.com/video/1050625641?h=39e15585d6",
     "width": 1920,
     "height": 1080,
-    "actor": "F1",
+    "actor": "F2",
     "target_emotion": "despondent"
   },
   {
@@ -664,11 +664,11 @@ var video_info_selected = [
     "target_emotion": "fascinated"
   },
   {
-    "name": "F1_fascinated",
-    "player_embed_url": "https://player.vimeo.com/video/1050621323?h=16ab238680",
+    "name": "F3_fascinated",
+    "player_embed_url": "https://player.vimeo.com/video/1050626115?h=56a2e27ebb",
     "width": 1920,
     "height": 1080,
-    "actor": "F1",
+    "actor": "F3",
     "target_emotion": "fascinated"
   },
   {
@@ -784,11 +784,11 @@ var video_info_selected = [
     "target_emotion": "hateful"
   },
   {
-    "name": "F1_hopeful",
-    "player_embed_url": "https://player.vimeo.com/video/1050621369?h=f794864a88",
+    "name": "F2_hopeful",
+    "player_embed_url": "https://player.vimeo.com/video/1050607669?h=5f2a870c32",
     "width": 1920,
     "height": 1080,
-    "actor": "F1",
+    "actor": "F2",
     "target_emotion": "hopeful"
   },
   {
@@ -880,11 +880,11 @@ var video_info_selected = [
     "target_emotion": "incredulous"
   },
   {
-    "name": "F1_indecisive",
-    "player_embed_url": "https://player.vimeo.com/video/1050621403?h=fd57b2badd",
+    "name": "F3_indecisive",
+    "player_embed_url": "https://player.vimeo.com/video/1050626202?h=648ec67399",
     "width": 1920,
     "height": 1080,
-    "actor": "F1",
+    "actor": "F3",
     "target_emotion": "indecisive"
   },
   {
@@ -904,11 +904,11 @@ var video_info_selected = [
     "target_emotion": "indifferent"
   },
   {
-    "name": "F1_indifferent",
-    "player_embed_url": "https://player.vimeo.com/video/1050621409?h=dd42d23b11",
+    "name": "F4_indifferent",
+    "player_embed_url": "https://player.vimeo.com/video/1050614778?h=616e2cf9e9",
     "width": 1920,
     "height": 1080,
-    "actor": "F1",
+    "actor": "F4",
     "target_emotion": "indifferent"
   },
   {
@@ -1192,11 +1192,11 @@ var video_info_selected = [
     "target_emotion": "regretful"
   },
   {
-    "name": "F1_regretful",
-    "player_embed_url": "https://player.vimeo.com/video/1058432713?h=7cbe3c5589",
+    "name": "F3_regretful",
+    "player_embed_url": "https://player.vimeo.com/video/1050626346?h=6556f637c5",
     "width": 1920,
     "height": 1080,
-    "actor": "F1",
+    "actor": "F3",
     "target_emotion": "regretful"
   },
   {
@@ -1280,11 +1280,11 @@ var video_info_selected = [
     "target_emotion": "satisfied"
   },
   {
-    "name": "F1_serious",
-    "player_embed_url": "https://player.vimeo.com/video/1050621690?h=e7e2f06783",
+    "name": "F5_serious",
+    "player_embed_url": "https://player.vimeo.com/video/1050634282?h=88b00d6e5e",
     "width": 1920,
     "height": 1080,
-    "actor": "F1",
+    "actor": "F5",
     "target_emotion": "serious"
   },
   {
@@ -1328,11 +1328,11 @@ var video_info_selected = [
     "target_emotion": "stern"
   },
   {
-    "name": "F1_suspicious",
-    "player_embed_url": "https://player.vimeo.com/video/1050621766?h=ae01556c47",
+    "name": "F6_suspicious",
+    "player_embed_url": "https://player.vimeo.com/video/1050616348?h=f627873303",
     "width": 1920,
     "height": 1080,
-    "actor": "F1",
+    "actor": "F6",
     "target_emotion": "suspicious"
   },
   {
@@ -1424,11 +1424,11 @@ var video_info_selected = [
     "target_emotion": "threatening"
   },
   {
-    "name": "F1_uneasy",
-    "player_embed_url": "https://player.vimeo.com/video/1050621868?h=944649e249",
+    "name": "F7_uneasy",
+    "player_embed_url": "https://player.vimeo.com/video/1050633021?h=c4f3a283b8",
     "width": 1920,
     "height": 1080,
-    "actor": "F1",
+    "actor": "F7",
     "target_emotion": "uneasy"
   },
   {
