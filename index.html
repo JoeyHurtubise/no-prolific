@@ -99,7 +99,7 @@
     labels_variables = shuffle(video_info_selected)
     grid_variables = labels_variables
 
-
+https://app.prolific.com/submissions/complete
 
  </script>
 
@@ -151,12 +151,11 @@
     jsPsych.init({
         timeline: timeline,
         on_finish: function() {
-            jsPsych.data.displayData();
-            jsPsych.data.get().localSave('csv', 'experiment_data.csv');
+            window.location = "https://app.prolific.co/submissions/complete"
         },
         show_progress_bar: true,
         auto_update_progress_bar: false,
     })
-
+    
     </script>
 </html>
