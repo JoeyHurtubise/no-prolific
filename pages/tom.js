@@ -478,7 +478,7 @@ var grid_procedure_pt6 = {
 // Define an alternate timeline if they fail 2 attention checks
 var attention_screened_out = {
   type: 'html-button-response',
-  stimulus: '<h3>Thank you for participating!</h1><p>You are done with the experiment. You will receive the full payment for your participation. Thank you for your time and contribution.</p><p>You will be automatically redirected to Prolific upon clicking <strong>Complete Experiment</strong>.</p><p>Please DO NOT close this tab until you have been redirected to Prolific. Please take note of your Prolific Completion Code before clicking <strong>Complete Experiment</strong>: <strong>C15MF6SK</strong>.</p>',
+  stimulus: '<h3>Thank you for participating!</h1><p>You have been screened out of the experiment for failing too many attention checks. Thank you for your time and contribution.</p><p>You will be automatically redirected to Prolific upon clicking <strong>Complete Experiment</strong>.</p><p>Please DO NOT close this tab until you have been redirected to Prolific. Please take note of your Prolific Completion Code before clicking <strong>Complete Experiment</strong>: <strong>C15MF6SK</strong>.</p>',
   choices: ['Complete Experiment'],
   on_finish: function() {
       jsPsych.endExperiment("Screened out due to failing attention checks.");
@@ -496,7 +496,7 @@ var attention_screened_out = {
 // Define an alternate timeline if they take too long during their break
 var break_screened_out = {
   type: 'html-button-response',
-  stimulus: '<div style="text-align: center; width: 800px; margin: auto"><h3>Thank you for participating!</h1><p>You exceeded the time limit for the break and you have been timed out of this study due to inactivity. You will be compensated for the time you have spent on this study by bonus/partial payment. Thank you for your time.</p><p>You will be automatically redirected to Prolific upon clicking <strong>Complete Experiment</strong>.</p><p>Please <strong>DO NOT</strong> close this tab until you have been redirected to Prolific. Please take note of your Prolific Completion Code: <strong>XXXXX</strong>.</p></div>',
+  stimulus: '<h3>Thank you for participating!</h1><p>You have been screened out of the experiment for failing too many attention checks. Thank you for your time and contribution.</p><p>You will be automatically redirected to Prolific upon clicking <strong>Complete Experiment</strong>.</p><p>Please DO NOT close this tab until you have been redirected to Prolific. Please take note of your Prolific Completion Code before clicking <strong>Complete Experiment</strong>: <strong>C15MF6SK</strong>.</p>',
   choices: ['Complete Experiment'],
   on_finish: function() {
       jsPsych.endExperiment("Timed out due to exceeding the provided break time (inactivity).");
