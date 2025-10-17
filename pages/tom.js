@@ -496,7 +496,7 @@ var attention_screened_out = {
 // Define an alternate timeline if they take too long during their break
 var break_screened_out = {
   type: 'html-button-response',
-  stimulus: '<h3>Thank you for participating!</h1><p>You have been screened out of the experiment for failing too many attention checks. Thank you for your time and contribution.</p><p>You will be automatically redirected to Prolific upon clicking <strong>Complete Experiment</strong>.</p><p>Please DO NOT close this tab until you have been redirected to Prolific. Please take note of your Prolific Completion Code before clicking <strong>Complete Experiment</strong>: <strong>C15MF6SK</strong>.</p>',
+  stimulus: '<h3>Thank you for participating!</h1><p>You have been screened out of the experiment for taking too long during the break. Thank you for your time and contribution.</p><p>You will be automatically redirected to Prolific upon clicking <strong>Complete Experiment</strong>.</p><p>Please DO NOT close this tab until you have been redirected to Prolific. Please take note of your Prolific Completion Code before clicking <strong>Complete Experiment</strong>: <strong>C15MF6SK</strong>.</p>',
   choices: ['Complete Experiment'],
   on_finish: function() {
       jsPsych.endExperiment("Timed out due to exceeding the provided break time (inactivity).");
