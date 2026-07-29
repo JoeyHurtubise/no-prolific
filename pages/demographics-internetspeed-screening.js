@@ -12,7 +12,20 @@ var demographics = {
 
 var internet_screened_out = {
     type: 'html-button-response',
-    stimulus: '<div style="text-align: center; width: 800px; margin: auto"><h3>Thank you for participating!</h1><p>Your internet speed is too slow to participate in this experiment and you have been screened out of this study. You will be compensated for the time you have spent on this study by bonus/partial payment. Thank you for your time.</p><p>You will be automatically redirected to Prolific upon clicking <strong>Complete Experiment</strong>.</p><p>Please <strong>DO NOT</strong> close this tab until you have been redirected to Prolific. Please take note of your Prolific Completion Code: <strong>C15MF6SK</strong>.</p></div>',
+    stimulus: function() {
+        var msg = '<div style="text-align: center; width: 800px; margin: auto"><h3>Thank you for participating!</h3>';
+        msg += '<p>Your internet speed is too slow to participate in this experiment and you have been screened out of this study. You will be compensated for the time you have spent on this study by bonus/partial payment. Thank you for your time.</p>';
+        if (COMPLETION_CODE) {
+            msg += '<p>Please take note of your completion code: <strong>' + COMPLETION_CODE + '</strong>.</p>';
+        }
+        if (REDIRECT_URL) {
+            msg += '<p>You will be automatically redirected upon clicking <strong>Complete Experiment</strong>. Please do not close this tab until then.</p>';
+        } else {
+            msg += '<p>You may now close this window.</p>';
+        }
+        msg += '</div>';
+        return msg;
+    },
     choices: ['Complete Experiment'],
     on_finish: function() {
         jsPsych.endExperiment("Screened out due to low internet speed.");

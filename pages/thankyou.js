@@ -1,11 +1,22 @@
 var thankyou = {
     type: 'html-button-response',
-    stimulus: '<h3>Thank you for participating!</h1><p>You are done with the experiment. You will receive the full payment for your participation. Thank you for your time and contribution.</p><p>You will be automatically redirected to Prolific upon clicking <strong>Complete Experiment</strong>.</p><p>Please DO NOT close this tab until you have been redirected to Prolific. Please take note of your Prolific Completion Code before clicking <strong>Complete Experiment</strong>: <strong>C1HPV5RI</strong>.</p>',
+    stimulus: function() {
+        var msg = '<h3>Thank you for participating!</h3>';
+        msg += '<p>You are done with the experiment. Thank you for your time and contribution.</p>';
+        if (COMPLETION_CODE) {
+            msg += '<p>Please take note of your completion code before clicking <strong>Complete Experiment</strong>: <strong>' + COMPLETION_CODE + '</strong>.</p>';
+        }
+        if (REDIRECT_URL) {
+            msg += '<p>You will be automatically redirected upon clicking <strong>Complete Experiment</strong>. Please do not close this tab until then.</p>';
+        } else {
+            msg += '<p>You may now close this window.</p>';
+        }
+        return msg;
+    },
     choices: ['Complete Experiment'],
     data: {
         PID: pid,
         START_TIME: start_time,
-        EXP_AB: exp_ab,
         ATTENTION_FAILURES: attention_failures
     }
 }

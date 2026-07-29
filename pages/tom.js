@@ -52,45 +52,9 @@ var mask = {
   choices: jsPsych.NO_KEYS
 };
 
-var labels_instructions = {
-  type: 'instructions',
-  pages: [
-    '<div style="width: 1000px; height: 200px"><p>This test will investigate your ability to read emotion from an expression.</p><p>You will be shown a short video demonstrating an expression. Following this, you will be shown four labels and you should select the one that best describes the emotion that was represented in the video. Please provide one best guess for each item.</p><p>Click on <strong>Next</strong> to see an example.</p></div>',
-    '<div style="width: 1000px; height: 600px;"> \
-    <p>Here is an example of a video and four possible emotion labels. Clicking on <span style="color: red; font-weight: bold;">doubtful</span> would mean that you consider this video to correspond best to that emotion.</p> \
-    <div style="display: flex; align-items: center; justify-content: space-between;"> \
-      <iframe id="vimeo-player" \
-        src="https://player.vimeo.com/video/1030059255?h=2973baf53a&autoplay=1&muted=1&controls=0&loop=0&title=0&byline=0&portrait=0&playsinline=1&keyboard=0" \
-        width="768" \
-        height="432" \
-        frameborder="0" \
-        allow="autoplay; fullscreen">\
-      </iframe> \
-    <img src="stimuli/instructions-labels.png" alt="instructions-labels" width="400"></div></div>',
-    '<p>Now you will be shown the glossary of the mental states used in this experiment.</p><p>Please read through the list and make sure to learn the definition of any mental states you are not familiar with.</p>Please note that you will not have access to the glossary during the experiment.<p>Click on <strong>Next</strong> to continue.</p.>',
-    '<br><br><b>GLOSSARY FOR MENTAL STATES </b><br><br>' + emotion_definitions,
-    '<p>Now we are going to do a practice trial.</p><p>You will be shown a short video. Then, the labels will be displayed for you to click on the one corresponding to the shown emotion.</p><p>Click on <strong>Next</strong> when you are ready to start. Once you click <strong>Next</strong>, you will not be able to go back.</p>'
-    ],
-  show_clickable_nav: true
-}
-
-var labels = {
-  type: "custom-labels-response",
-  stimulus: 'What emotion was the face showing?<br><br>',
-  choices: function() {
-    let target_emn = jsPsych.timelineVariable('target_emotion');
-    // console.log("Target emotion:", target_emn);  // Debugging
-    return emotion_array(target_emn);
-  },
-  data: {
-    trial: 'tom-labels',
-    actor: jsPsych.timelineVariable('actor'),
-    target_emotion: jsPsych.timelineVariable('target_emotion')
-  },
-  on_finish: function () {
-    jsPsych.setProgressBar(jsPsych.getProgressBarCompleted() + (1 / PROGRESS_BAR_N))
-  }
-};
+// =========================================================
+// GRID response (valence/arousal) - unchanged from prior version
+// =========================================================
 
 var grid = {
   type: 'html-custom-grid-response',
@@ -108,100 +72,80 @@ var grid = {
   }
 }
 
-var labels_practice_trial = {
-  type: "custom-labels-response",
-  stimulus: 'What emotion was the face showing?<br><br>',
-  choices: function() {
-    let target_emn = jsPsych.timelineVariable('target_emotion');
-    // console.log("Target emotion:", target_emn);  // Debugging
-    return emotion_array(target_emn);
-  },
+// =========================================================
+// WORDS response (new) - "what is the person thinking about?"
+// =========================================================
+
+var words = {
+  type: 'html-custom-words-response',
+  stimulus: 'What is the person (in the stimuli) thinking about?<br><br>',
+  min_words: 1,
+  max_words: 3,
   data: {
-    trial: 'tom-labels-practice',
+    trial: 'tom-words',
     actor: jsPsych.timelineVariable('actor'),
     target_emotion: jsPsych.timelineVariable('target_emotion')
-  }
-};
-
-var labels_practice = {
-  timeline: [labels_instructions, fixation, video, mask, labels_practice_trial],
-  randomize_order: false,
-  timeline_variables: [{
-    "name": "12_distrustful_3sec",
-    "player_embed_url": "https://player.vimeo.com/video/1030059255?h=2973baf53a",
-    "actor": 12,
-    "target_emotion": "Doubtful",
-    "choices": ['Doubtful', 'Hostile', 'Alarmed', 'Disappointed']
-  }]
-};
-
-var labels_attention_check1 = {
-  type: "custom-labels-response",
-  stimulus: 'This is an attention check, please press on the label that says <strong>Click</strong>.<br>',
-  choices: ['Do not click', 'Click', 'Do not click', 'Do not click'],
-  on_finish: function(data) {
-    // Check if the participant selected "annoyed"
-    var passed = (data.response === "Click");
-
-    // Update failure count if they fail
-    if (!passed) {
-      attention_failures += 1}},
-  data: {
-    trial: 'attention-check',
-    actor: jsPsych.timelineVariable('actor'),
-    target_emotion: jsPsych.timelineVariable('target_emotion'),
   },
   on_finish: function () {
     jsPsych.setProgressBar(jsPsych.getProgressBarCompleted() + (1 / PROGRESS_BAR_N))
   }
-};
+}
 
-var labels_attention_check2 = {
-  type: "custom-labels-response",
-  stimulus: 'This is an attention check, please press on the label that says <strong>Click</strong>.<br>',
-  choices: ['Do not click', 'Do not click', 'Do not click', 'Click'],
-  on_finish: function(data) {
-    // Check if the participant selected "annoyed"
-    var passed = (data.response === "Click");
+// =========================================================
+// Instructions
+// =========================================================
 
-    // Update failure count if they fail
-    if (!passed) {
-      attention_failures += 1}},
-  data: {
-    trial: 'attention-check',
-    actor: jsPsych.timelineVariable('actor'),
-    target_emotion: jsPsych.timelineVariable('target_emotion'),
-  },
-  on_finish: function () {
-    jsPsych.setProgressBar(jsPsych.getProgressBarCompleted() + (1 / PROGRESS_BAR_N))
-  }
-};
+var gridwords_instructions = {
+  type: 'instructions',
+  pages: [
+    '<div style="width: 1000px; height: 220px"><p>This test will investigate your ability to read emotion and infer mental states from an expression.</p><p>You will be shown a short video demonstrating an expression. After each video, you will do two things: first, place a mark on a grid describing the emotion; second, type 1 to 3 words describing what you think the person is thinking about.</p><p>Click on <strong>Next</strong> to see an example.</p></div>',
+    '<div style="width: 1000px; height: 600px;"> \
+    <p>Here is an example of a valence-arousal grid. Clicking somewhere in the upper right quadrant would mean that you consider this expression to be more positive and higher arousal.</p> \
+    <div style="display: flex; align-items: center; justify-content: space-between;"> \
+      <iframe id="vimeo-player" \
+        src="https://player.vimeo.com/video/1030059255?h=2973baf53a&autoplay=1&muted=1&controls=0&loop=0&title=0&byline=0&portrait=0&playsinline=1&keyboard=0" \
+        width="768" \
+        height="432" \
+        frameborder="0" \
+        allow="autoplay; fullscreen">\
+      </iframe> \
+    <img src="stimuli/instructions-grid.png" alt="instructions-grid" width="400"></div><p>Click on <strong>Next</strong> to continue.</p></div>',
+    '<div style="width: 1000px; height: 200px"><p>After the grid, you will be asked: <strong>"What is the person (in the stimuli) thinking about?"</strong></p><p>Please answer with <strong>1 to 3 single words</strong> (no numbers, no punctuation, no phrases) that come to mind.</p><p>Click on <strong>Next</strong> to continue.</p></div>',
+    '<p>Now we are going to do a practice trial.</p><p>You will be shown a short video. After this, the grid will be displayed, followed by the words question.</p><p>Click on <strong>Next</strong> when you are ready to start. Once you click <strong>Next</strong>, you will not be able to go back.</p>'
+    ],
+  show_clickable_nav: true
+}
 
-var labels_attention_check_procedure1 = {
-  timeline: [fixation, video, mask, labels_attention_check1],
-  randomize_order: false,
-  timeline_variables: labels_variables.slice(5,6)
-};
-
-var labels_attention_check_procedure2 = {
-  timeline: [fixation, video, mask, labels_attention_check2],
-  randomize_order: false,
-  timeline_variables: labels_variables.slice(30,31)
-};
-
-var labels_attention_check_procedure3 = {
-  timeline: [fixation, video, mask, labels_attention_check1],
-  randomize_order: false,
-  timeline_variables: labels_variables.slice(70,71)
-};
-
-var labels_instructions_again = {
+var gridwords_instructions_again = {
   type: 'html-button-response',
-  stimulus: '<div style="width: 1000px; height: 45px"><p>You will now be shown a series of short videos. Please select the label that best describes the emotion that the face was showing. Please provide one best guess for each item. Starting now, your responses will be recorded.</p><p>Click <strong>Continue</strong> to start. Good luck!</p></div>',
+  stimulus: '<div style="width: 1000px; height: 70px"><p>You will now be shown a series of short videos. After each one, please rate it on the grid, then type 1 to 3 words describing what the person is thinking about, as you did in the practice trials. Starting now, your responses will be recorded.</p><p>Click <strong>Continue</strong> to start. Good luck!</p></div>',
   choices: ['Continue'],
   data: {trial:false},
   margin_vertical: '80px'
 }
+
+// =========================================================
+// Practice trial
+// =========================================================
+
+var gridwords_practice_trial = [grid, words];
+
+var PRACTICE_VIDEO = [{
+  "name": "12_distrustful_3sec",
+  "player_embed_url": "https://player.vimeo.com/video/1030059255?h=2973baf53a",
+  "actor": 12,
+  "target_emotion": "Doubtful",
+}];
+
+var gridwords_practice = {
+  timeline: [gridwords_instructions, fixation, video, mask].concat(gridwords_practice_trial),
+  randomize_order: false,
+  timeline_variables: PRACTICE_VIDEO
+};
+
+// =========================================================
+// Between-trial breaks (unchanged)
+// =========================================================
 
 var between_trials_countdown1 = {
   type: 'html-button-response',
@@ -215,7 +159,6 @@ var between_trials_countdown1 = {
   on_load: function(){
     var wait_time = 5 * 60 * 1000; // in milliseconds
     var start_time = performance.now();
-    // document.querySelector('button').disabled = true;
     var interval = setInterval(function(){
     var time_left = wait_time - (performance.now() - start_time);
     var minutes = Math.floor(time_left / 1000 / 60);
@@ -231,8 +174,6 @@ var between_trials_countdown1 = {
     },
     on_finish: function(data) {
     var too_long = (data.response === null);
-    
-    // If they took too long during the break, set break_timed_out to true (var defined in index.html)
     if (too_long) {
       break_timed_out = true}},
 }
@@ -249,7 +190,6 @@ var between_trials_countdown2 = {
   on_load: function(){
     var wait_time = 5 * 60 * 1000; // in milliseconds
     var start_time = performance.now();
-    // document.querySelector('button').disabled = true;
     var interval = setInterval(function(){
     var time_left = wait_time - (performance.now() - start_time);
     var minutes = Math.floor(time_left / 1000 / 60);
@@ -265,74 +205,13 @@ var between_trials_countdown2 = {
     },
     on_finish: function(data) {
     var too_long = (data.response === null);
-    
-    // If they took too long during the break, set break_timed_out to true (var defined in index.html)
     if (too_long) {
       break_timed_out = true}},
 }
 
-var post_break_glossary = {
-  type: 'instructions',
-  pages: [
-    '<p>You will now be shown the glossary of the mental states used in this experiment.</p><p>Please read through the list and make sure to learn the definition of any mental states you are not familiar with.</p>Please note that you will not have access to the glossary during the experiment.<p>Click on <strong>Next</strong> to continue.</p.>',
-    '<br><br><b>GLOSSARY FOR MENTAL STATES </b><br><br>' + emotion_definitions,
-    '<p>Click on <strong>Next</strong> when you are ready to resume the experiment. Once you click <strong>Next</strong>, you will not be able to go back.</p>'
-    ],
-  show_clickable_nav: true
-}
-
-var grid_practice_trial = {
-  type: 'html-custom-grid-response',
-  around_grid: 'labels',
-  stimulus: "Please locate the emotion in an appropriate spot in the grid by pointing and clicking the mouse.<br>Press the <b>space bar</b> when you\'re ready to continue.<br><br>",
-  grid_height: 300,
-  maintain_aspect_ratio: true,
-  data: {
-    trial: 'tom-grid-practice',
-    actor: jsPsych.timelineVariable('actor'),
-    target_emotion: jsPsych.timelineVariable('target_emotion')
-  }
-}
-
-var grid_instructions = {
-  type: 'instructions',
-  pages: [
-    '<div style="width: 1000px; height: 200px"><p>This test will investigate your ability to read emotion from an expression.</p><p>You will be shown a short video demonstrating an expression, and then a grid will appear for you to select the best placement describing the emotion that the face was showing. This placement is based on your perception of <strong>arousal</strong> (low or high intensity) and <strong>valence</strong> (negative or positive emotion). Please provide one best guess for each item.</p><p>Click on <strong>Next</strong> to see an example.</p></div>',
-    '<div style="width: 1000px; height: 600px;"> \
-    <p>Here is an example of a valence-arousal grid. Clicking somewhere in the upper right quadrant would mean that you consider this expression to be more positive and higher arousal.</p> \
-    <div style="display: flex; align-items: center; justify-content: space-between;"> \
-      <iframe id="vimeo-player" \
-        src="https://player.vimeo.com/video/1030059255?h=2973baf53a&autoplay=1&muted=1&controls=0&loop=0&title=0&byline=0&portrait=0&playsinline=1&keyboard=0" \
-        width="768" \
-        height="432" \
-        frameborder="0" \
-        allow="autoplay; fullscreen">\
-      </iframe> \
-    <img src="stimuli/instructions-grid.png" alt="instructions-grid" width="400"></div><p>Click on <strong>Next</strong> to continue.</p></div>',
-    '<p>Now we are going to do a practice trial.</p><p>You will be shown a short video. After this, the grid will be displayed for you to click on the placement you believe to best correspond to the shown emotion.</p><p>Click on <strong>Next</strong> when you are ready to start. Once you click <strong>Next</strong>, you will not be able to go back.</p>'
-    ],
-  show_clickable_nav: true
-}
-
-
-var grid_practice = {
-  timeline: [grid_instructions, fixation, video, mask, grid_practice_trial],
-  randomize_order: false,
-  timeline_variables: [{
-    "name": "12_distrustful_3sec",
-    "player_embed_url": "https://player.vimeo.com/video/1030059255?h=2973baf53a",
-    "actor": 12,
-    "target_emotion": "Doubtful",
-  }]
-};
-
-var grid_instructions_again = {
-  type: 'html-button-response',
-  stimulus: '<div style="width: 1000px; height: 70px"><p>You will now be shown a series of short videos. Please identify an appropriate location in the grid for the emotion expressed as you did before in the practice trials. Starting now, your responses will be recorded.</p><p>Click <strong>Continue</strong> to start. Good luck!</p></div>',
-  choices: ['Continue'],
-  data: {trial:false},
-  margin_vertical: '80px'
-}
+// =========================================================
+// Attention checks - grid-only (unchanged mechanics), no words step
+// =========================================================
 
 var grid_attention_check1 = {
   type: 'html-custom-grid-response-ac',
@@ -345,11 +224,7 @@ var grid_attention_check1 = {
   on_finish: function(data) {
     var x = Number(data.x);
     var y = Number(data.y);
-    
-    // Check if the click was in the bottom left quadrant
     var passed = (x < 0 && y < 0);
-
-    // Update global failure counter if they fail
     if (!passed) {
       attention_failures += 1;
     }
@@ -375,11 +250,7 @@ var grid_attention_check2 = {
   on_finish: function(data) {
     var x = Number(data.x);
     var y = Number(data.y);
-    
-    // Check if the click was in the top left quadrant
     var passed = (x < 0 && y > 0);
-
-    // Update global failure counter if they fail
     if (!passed) {
       attention_failures += 1;
     }
@@ -394,147 +265,159 @@ var grid_attention_check2 = {
   }
 }
 
-var grid_attention_check_procedure1 = {
-  timeline: [fixation, video, mask, grid_attention_check1],
-  randomize_order: false,
-  timeline_variables: grid_variables.slice(5,6)
-};
+// =========================================================
+// Screen-out branches (unchanged)
+// =========================================================
 
-var grid_attention_check_procedure2 = {
-  timeline: [fixation, video, mask, grid_attention_check2],
-  randomize_order: false,
-  timeline_variables: grid_variables.slice(30,31)
-};
-
-var grid_attention_check_procedure3 = {
-  timeline: [fixation, video, mask, grid_attention_check1],
-  randomize_order: false,
-  timeline_variables: grid_variables.slice(50,51)
-};
-
-// ==========
-
-var labels_procedure_pt1 = {
-  timeline: [fixation, video, mask, labels],
-  timeline_variables: labels_variables.slice(0,40) // 40 videos > AC 
-};
-
-var labels_procedure_pt2 = {
-  timeline: [fixation, video, mask, labels],
-  timeline_variables: labels_variables.slice(40,62) // AC > 22 videos > break
-};
-
-var labels_procedure_pt3 = {
-  timeline: [fixation, video, mask, labels],
-  timeline_variables: labels_variables.slice(62,92) // break > 30 videos > AC
-};
-
-var labels_procedure_pt4 = {
-  timeline: [fixation, video, mask, labels],
-  timeline_variables: labels_variables.slice(92, 124) // AC > 32 videos > break
-};
-
-var labels_procedure_pt5 = {
-  timeline: [fixation, video, mask, labels],
-  timeline_variables: labels_variables.slice(124, 154) // break > 30 videos > AC
-};
-
-var labels_procedure_pt6 = {
-  timeline: [fixation, video, mask, labels],
-  timeline_variables: labels_variables.slice(154, 186) // AC > 32 videos 
-};
-
-var grid_procedure_pt1 = {
-  timeline: [fixation, video, mask, grid],
-  timeline_variables: grid_variables.slice(0,40) // 40 videos > AC 
-};
-
-var grid_procedure_pt2 = {
-  timeline: [fixation, video, mask, grid],
-  timeline_variables: grid_variables.slice(40,62) // AC > 22 videos > break
-};
-
-var grid_procedure_pt3 = {
-  timeline: [fixation, video, mask, grid],
-  timeline_variables: grid_variables.slice(62,92) // break > 30 videos > AC
-};
-
-var grid_procedure_pt4 = {
-  timeline: [fixation, video, mask, grid],
-  timeline_variables: grid_variables.slice(92, 124) // AC > 32 videos > break
-};
-
-var grid_procedure_pt5 = {
-  timeline: [fixation, video, mask, grid],
-  timeline_variables: grid_variables.slice(124, 154) // break > 30 videos > AC
-};
-
-var grid_procedure_pt6 = {
-  timeline: [fixation, video, mask, grid],
-  timeline_variables: grid_variables.slice(154, 186) // AC > 32 videos 
-};
-
-
-// Define an alternate timeline if they fail 2 attention checks
 var attention_screened_out = {
   type: 'html-button-response',
-  stimulus: '<h3>Thank you for participating!</h1><p>You have been screened out of the experiment for failing too many attention checks. Thank you for your time and contribution.</p><p>You will be automatically redirected to Prolific upon clicking <strong>Complete Experiment</strong>.</p><p>Please DO NOT close this tab until you have been redirected to Prolific. Please take note of your Prolific Completion Code before clicking <strong>Complete Experiment</strong>: <strong>C15MF6SK</strong>.</p>',
+  stimulus: function() {
+    var msg = '<h3>Thank you for participating!</h3><p>You have been screened out of the experiment for failing too many attention checks. Thank you for your time and contribution.</p>';
+    if (COMPLETION_CODE) {
+      msg += '<p>Please take note of your completion code before clicking <strong>Complete Experiment</strong>: <strong>' + COMPLETION_CODE + '</strong>.</p>';
+    }
+    if (REDIRECT_URL) {
+      msg += '<p>You will be automatically redirected upon clicking <strong>Complete Experiment</strong>. Please do not close this tab until then.</p>';
+    } else {
+      msg += '<p>You may now close this window.</p>';
+    }
+    return msg;
+  },
   choices: ['Complete Experiment'],
   on_finish: function() {
       jsPsych.endExperiment("Screened out due to failing attention checks.");
       }
   };
 
-  // Define a conditional node to check if failures reached 2
-  var check_attention_failures = {
+var check_attention_failures = {
   timeline: [attention_screened_out],
   conditional_function: function() {
       return attention_failures >= 2;
     }
   };
 
-// Define an alternate timeline if they take too long during their break
 var break_screened_out = {
   type: 'html-button-response',
-  stimulus: '<h3>Thank you for participating!</h1><p>You have been screened out of the experiment for taking too long during the break. Thank you for your time and contribution.</p><p>You will be automatically redirected to Prolific upon clicking <strong>Complete Experiment</strong>.</p><p>Please DO NOT close this tab until you have been redirected to Prolific. Please take note of your Prolific Completion Code before clicking <strong>Complete Experiment</strong>: <strong>C15MF6SK</strong>.</p>',
+  stimulus: function() {
+    var msg = '<h3>Thank you for participating!</h3><p>You have been screened out of the experiment for taking too long during the break. Thank you for your time and contribution.</p>';
+    if (COMPLETION_CODE) {
+      msg += '<p>Please take note of your completion code before clicking <strong>Complete Experiment</strong>: <strong>' + COMPLETION_CODE + '</strong>.</p>';
+    }
+    if (REDIRECT_URL) {
+      msg += '<p>You will be automatically redirected upon clicking <strong>Complete Experiment</strong>. Please do not close this tab until then.</p>';
+    } else {
+      msg += '<p>You may now close this window.</p>';
+    }
+    return msg;
+  },
   choices: ['Complete Experiment'],
   on_finish: function() {
       jsPsych.endExperiment("Timed out due to exceeding the provided break time (inactivity).");
       }
   };
 
-  // Define a conditional node to check if break time was too long
-  var check_break = {
+var check_break = {
   timeline: [break_screened_out],
   conditional_function: function() {
       return break_timed_out;
     }
   };
 
-var TOM_LABELS = [
-  labels_practice, 
-  labels_instructions_again, 
-  labels_procedure_pt1, labels_attention_check_procedure1, check_attention_failures, 
-  labels_procedure_pt2, between_trials_countdown1, post_break_glossary,
-  labels_procedure_pt3, labels_attention_check_procedure2, check_attention_failures, 
-  labels_procedure_pt4, between_trials_countdown2, post_break_glossary,
-  labels_procedure_pt5, labels_attention_check_procedure3, check_attention_failures, 
-  labels_procedure_pt6
-]
+// =========================================================
+// Main procedure - dynamically chunked into 6 blocks with
+// 3 attention checks and 2 breaks, based on however many
+// stimuli end up in gridwords_variables (set in index.html).
+//
+// NOTE: block sizes and attention-check placement below are
+// computed dynamically rather than hardcoded, since the final
+// stimulus subset for this condition has not been finalized yet.
+// If you want exact control over which specific videos are used
+// as attention checks, replace build_procedure_blocks() with
+// fixed .slice(...) calls once the stimulus list is final.
+// =========================================================
 
-var TOM_GRID = [
-  grid_practice, 
-  grid_instructions_again, 
-  grid_procedure_pt1, grid_attention_check_procedure1, check_attention_failures, 
-  grid_procedure_pt2, between_trials_countdown1,
-  grid_procedure_pt3, grid_attention_check_procedure2, check_attention_failures, 
-  grid_procedure_pt4, between_trials_countdown2,
-  grid_procedure_pt5, grid_attention_check_procedure3, check_attention_failures, 
-  grid_procedure_pt6
-]
+function build_procedure_blocks(variables) {
+  var total = variables.length;
+  var chunk_size = Math.ceil(total / 6);
 
-// var video_testing = {
-//   timeline: [video],
-//   randomize_order: false, // change this back for actual experiment! TODO
-//   timeline_variables: tom_variables.slice(5,94)
-// };
+  var blocks = [];
+  for (var i = 0; i < 6; i++) {
+    var start = i * chunk_size;
+    var end = Math.min(start + chunk_size, total);
+    blocks.push(variables.slice(start, end));
+  }
+
+  function ac_slice(block_index) {
+    var start = block_index * chunk_size;
+    var mid = Math.min(start + Math.floor(chunk_size / 2), total - 1);
+    return variables.slice(mid, mid + 1);
+  }
+
+  return {
+    blocks: blocks,
+    ac1: ac_slice(0), // within block 1
+    ac2: ac_slice(2), // within block 3
+    ac3: ac_slice(4)  // within block 5
+  };
+}
+
+var gridwords_procedure = build_procedure_blocks(gridwords_variables);
+
+var gridwords_procedure_pt1 = {
+  timeline: [fixation, video, mask, grid, words],
+  timeline_variables: gridwords_procedure.blocks[0]
+};
+
+var gridwords_procedure_pt2 = {
+  timeline: [fixation, video, mask, grid, words],
+  timeline_variables: gridwords_procedure.blocks[1]
+};
+
+var gridwords_procedure_pt3 = {
+  timeline: [fixation, video, mask, grid, words],
+  timeline_variables: gridwords_procedure.blocks[2]
+};
+
+var gridwords_procedure_pt4 = {
+  timeline: [fixation, video, mask, grid, words],
+  timeline_variables: gridwords_procedure.blocks[3]
+};
+
+var gridwords_procedure_pt5 = {
+  timeline: [fixation, video, mask, grid, words],
+  timeline_variables: gridwords_procedure.blocks[4]
+};
+
+var gridwords_procedure_pt6 = {
+  timeline: [fixation, video, mask, grid, words],
+  timeline_variables: gridwords_procedure.blocks[5]
+};
+
+var gridwords_attention_check_procedure1 = {
+  timeline: [fixation, video, mask, grid_attention_check1],
+  randomize_order: false,
+  timeline_variables: gridwords_procedure.ac1
+};
+
+var gridwords_attention_check_procedure2 = {
+  timeline: [fixation, video, mask, grid_attention_check2],
+  randomize_order: false,
+  timeline_variables: gridwords_procedure.ac2
+};
+
+var gridwords_attention_check_procedure3 = {
+  timeline: [fixation, video, mask, grid_attention_check1],
+  randomize_order: false,
+  timeline_variables: gridwords_procedure.ac3
+};
+
+var TOM_GRIDWORDS = [
+  gridwords_practice,
+  gridwords_instructions_again,
+  gridwords_procedure_pt1, gridwords_attention_check_procedure1, check_attention_failures,
+  gridwords_procedure_pt2, between_trials_countdown1,
+  gridwords_procedure_pt3, gridwords_attention_check_procedure2, check_attention_failures,
+  gridwords_procedure_pt4, between_trials_countdown2,
+  gridwords_procedure_pt5, gridwords_attention_check_procedure3, check_attention_failures,
+  gridwords_procedure_pt6
+]
