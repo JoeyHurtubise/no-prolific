@@ -5,7 +5,6 @@ var thankyou = {
     data: {
         PID: pid,
         START_TIME: start_time,
-        EXP_AB: exp_ab,
         ATTENTION_FAILURES: attention_failures
     }
 }
