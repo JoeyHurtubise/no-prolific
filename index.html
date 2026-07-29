@@ -1,8 +1,7 @@
 <!--
-    Theory of Mind / Emotion Recognition Study
-    Grid + Words condition
+    Emotion Recognition Study
 
-    Adapted from the original Emotion Recognition Study by Sophie Hoyer, 2024.
+    Sophie Hoyer 2024.
     Neurophilosophy Lab @ McGill University [https://www.neurophilosophylab.org].
 
     This experiment was built using jsPsych v6.3.1:
@@ -14,7 +13,7 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>Theory of Mind Study</title>
+        <title>Emotion Recognition Study</title>
         
         <!-- jsPsych and Stylesheet -->
         <script src="jspsych-6.3.1/jspsych.js"></script>
@@ -32,15 +31,29 @@
         <script src="jspsych-6.3.1/plugins/jspsych-html-keyboard-response.js"></script>
         <script src="jspsych-6.3.1/plugins/jspsych-html-button-response.js"></script>
         <script src="jspsych-6.3.1/plugins/jspsych-image-keyboard-response.js"></script>
+        <script src="jspsych-6.3.1/plugins/jspsych-custom-labels-response.js"></script>
         <script src="jspsych-6.3.1/plugins/jspsych-custom-grid-response.js"></script>
         <script src="jspsych-6.3.1/plugins/jspsych-custom-grid-response-ac.js"></script>
-        <script src="jspsych-6.3.1/plugins/jspsych-custom-words-response.js"></script>
         <script src="jspsych-6.3.1/plugins/jspsych-survey-demo.js"></script>
         <script src="jspsych-6.3.1/plugins/jspsych-instructions.js"></script>
         <script src="jspsych-6.3.1/plugins/jspsych-survey-text.js"></script>
         <script src="jspsych-6.3.1/plugins/jspsych-survey-text-numberonly.js"></script>
         
         <!-- Video Info -->
+         <!-- <script src="actor-video-info/01-video-info.js"></script>
+         <script src="actor-video-info/02-video-info.js"></script>
+         <script src="actor-video-info/03-video-info.js"></script>
+         <script src="actor-video-info/04-video-info.js"></script>
+         <script src="actor-video-info/05-video-info.js"></script>
+         <script src="actor-video-info/06-video-info.js"></script>
+         <script src="actor-video-info/07-video-info.js"></script>
+         <script src="actor-video-info/08-video-info.js"></script>
+         <script src="actor-video-info/09-video-info.js"></script>
+         <script src="actor-video-info/10-video-info.js"></script>
+         <script src="actor-video-info/11-video-info.js"></script>
+         <script src="actor-video-info/12-video-info.js"></script>
+         <script src="actor-video-info/13-video-info.js"></script>
+         <script src="actor-video-info/14-video-info.js"></script> -->
          <script src="actor-video-info/selected-video-info.js"></script>
          
         <!-- Scripts -->
@@ -55,32 +68,36 @@
     <script> 
 
     // Experiment Parameters
+    var exp_ab = 'A'                        // A = labels; B = grid 
     var pid = 'ERROR'                       // Prolific ID
     var attention_failures = 0              // for attention checks
     var break_threshold = 7 * 60 * 1000     // for how long to give participant before break times out in ms (set to null for indefinite time)
     var break_timed_out = false             // for breaks
     var start_time = Date.now()
+    var PROGRESS_BAR_N = 187                // 186 emotions + 1 for demographics     
 
     // Initialize variables 
-    var gridwords_variables = ''
-    var timeline            = []
+    var labels_variables = ''
+    var grid_variables   = ''
+    var timeline         = []
 
     // Run style
+    // if running offline (on computer), you need to change exp_ab or else it will throw an error
     var ONLINE = true        // true or false
     var PAVLOVIA = true      // true or false
 
     if (ONLINE) {
     // If running on Pavlovia, read URL parameter values from the link sent to participant.
-    // URL example: https://run.pavlovia.org/neurophilmcgill/video-tom-gitlab/?PID=YOURNAME
+    // URL example: https://run.pavlovia.org/neurophilmcgill/narratives-exp/?EXPAB=A&PID=YOURNAME
         var urlvar = jsPsych.data.urlVariables();
+        exp_ab = urlvar.EXPAB
         pid = urlvar.PID
+        // CONDITION = $.urlParam('CONDITION');
     };
 
-    gridwords_variables = shuffle(video_info_selected)
 
-    // Progress bar: 2 increments per stimulus (grid + words), plus 3 attention-check
-    // increments, plus 1 for demographics and 1 for consent.
-    var PROGRESS_BAR_N = (gridwords_variables.length * 2) + 3 + 2
+    labels_variables = shuffle(video_info_selected)
+    grid_variables = labels_variables
 
  </script>
 
@@ -94,10 +111,25 @@
 
 <script>
 
-    timeline = timeline.concat(WELCOMECONSENT)
-    timeline = timeline.concat(DEMOGRAPHICS)
-    timeline = timeline.concat(TOM_GRIDWORDS)
-    timeline = timeline.concat(THANKYOU)
+
+
+    if (exp_ab == 'A'){
+        timeline = timeline.concat(WELCOMECONSENT_labels)
+        timeline = timeline.concat(DEMOGRAPHICS)
+        timeline = timeline.concat(TOM_LABELS)
+        timeline = timeline.concat(THANKYOU)
+    }
+    else if (exp_ab == 'B'){
+        timeline = timeline.concat(WELCOMECONSENT_grid)
+        timeline = timeline.concat(DEMOGRAPHICS)
+        timeline = timeline.concat(TOM_GRID)
+        timeline = timeline.concat(THANKYOU)
+    }
+    else {
+        timeline = timeline.concat(ERROR_expab)
+    }
+
+
 
     // for running online through Pavlovia
     var pavlovia_init = {
