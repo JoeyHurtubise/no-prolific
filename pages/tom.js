@@ -98,7 +98,7 @@ var words = {
 var gridwords_instructions = {
   type: 'instructions',
   pages: [
-    '<div style="width: 1000px; height: 220px"><p>This test will investigate your ability to read emotion and infer mental states from an expression.</p><p>You will be shown a short video demonstrating an expression. After each video, you will do two things: first, place a mark on a grid describing the emotion; second, type 1 to 3 words describing what you think the person is thinking about.</p><p>Click on <strong>Next</strong> to see an example.</p></div>',
+    '<div style="width: 1000px; height: 220px"><p>This test will investigate your ability to read emotion and infer mental states from an expression.</p><p>You will be shown a short video demonstrating an expression. After each video, you will do three things: first, place a mark on a grid describing the emotion; second, watch the same video again; third, type 1 to 3 words describing what you think the person is thinking about.</p><p>Click on <strong>Next</strong> to see an example.</p></div>',
     '<div style="width: 1000px; height: 600px;"> \
     <p>Here is an example of a valence-arousal grid. Clicking somewhere in the upper right quadrant would mean that you consider this expression to be more positive and higher arousal.</p> \
     <div style="display: flex; align-items: center; justify-content: space-between;"> \
@@ -110,15 +110,15 @@ var gridwords_instructions = {
         allow="autoplay; fullscreen">\
       </iframe> \
     <img src="stimuli/instructions-grid.png" alt="instructions-grid" width="400"></div><p>Click on <strong>Next</strong> to continue.</p></div>',
-    '<div style="width: 1000px; height: 200px"><p>After the grid, you will be asked: <strong>"What is the person thinking?"</strong></p><p>Please answer with <strong>1 to 3 single words</strong> (no numbers, no punctuation, no phrases) that come to mind.</p><p>Click on <strong>Next</strong> to continue.</p></div>',
-    '<p>Now we are going to do a practice trial.</p><p>You will be shown a short video. After this, the grid will be displayed, followed by the words question.</p><p>Click on <strong>Next</strong> when you are ready to start. Once you click <strong>Next</strong>, you will not be able to go back.</p>'
+    '<div style="width: 1000px; height: 200px"><p>After the grid, the video will play again, and then you will be asked: <strong>"What is the person thinking?"</strong></p><p>Please answer with <strong>1 to 3 single words</strong> (no numbers, no punctuation, no phrases) that come to mind.</p><p>Click on <strong>Next</strong> to continue.</p></div>',
+    '<p>Now we are going to do a practice trial.</p><p>You will be shown a short video. After this, the grid will be displayed, then the video will play again, followed by the words question.</p><p>Click on <strong>Next</strong> when you are ready to start. Once you click <strong>Next</strong>, you will not be able to go back.</p>'
     ],
   show_clickable_nav: true
 }
 
 var gridwords_instructions_again = {
   type: 'html-button-response',
-  stimulus: '<div style="width: 1000px; height: 70px"><p>You will now be shown a series of short videos. After each one, please rate it on the grid, then type 1 to 3 words describing what the person is thinking about, as you did in the practice trials. Starting now, your responses will be recorded.</p><p>Click <strong>Continue</strong> to start. Good luck!</p></div>',
+  stimulus: '<div style="width: 1000px; height: 70px"><p>You will now be shown a series of short videos. After each one, please rate it on the grid, watch the video again, then type 1 to 3 words describing what the person is thinking about, as you did in the practice trials. Starting now, your responses will be recorded.</p><p>Click <strong>Continue</strong> to start. Good luck!</p></div>',
   choices: ['Continue'],
   data: {trial:false},
   margin_vertical: '80px'
@@ -128,7 +128,7 @@ var gridwords_instructions_again = {
 // Practice trial
 // =========================================================
 
-var gridwords_practice_trial = [grid, words];
+var gridwords_practice_trial = [grid, fixation, video, mask, words];
 
 var PRACTICE_VIDEO = [{
   "name": "12_distrustful_3sec",
@@ -364,32 +364,32 @@ function build_procedure_blocks(variables) {
 var gridwords_procedure = build_procedure_blocks(gridwords_variables);
 
 var gridwords_procedure_pt1 = {
-  timeline: [fixation, video, mask, grid, words],
+  timeline: [fixation, video, mask, grid, fixation, video, mask, words],
   timeline_variables: gridwords_procedure.blocks[0]
 };
 
 var gridwords_procedure_pt2 = {
-  timeline: [fixation, video, mask, grid, words],
+  timeline: [fixation, video, mask, grid, fixation, video, mask, words],
   timeline_variables: gridwords_procedure.blocks[1]
 };
 
 var gridwords_procedure_pt3 = {
-  timeline: [fixation, video, mask, grid, words],
+  timeline: [fixation, video, mask, grid, fixation, video, mask, words],
   timeline_variables: gridwords_procedure.blocks[2]
 };
 
 var gridwords_procedure_pt4 = {
-  timeline: [fixation, video, mask, grid, words],
+  timeline: [fixation, video, mask, grid, fixation, video, mask, words],
   timeline_variables: gridwords_procedure.blocks[3]
 };
 
 var gridwords_procedure_pt5 = {
-  timeline: [fixation, video, mask, grid, words],
+  timeline: [fixation, video, mask, grid, fixation, video, mask, words],
   timeline_variables: gridwords_procedure.blocks[4]
 };
 
 var gridwords_procedure_pt6 = {
-  timeline: [fixation, video, mask, grid, words],
+  timeline: [fixation, video, mask, grid, fixation, video, mask, words],
   timeline_variables: gridwords_procedure.blocks[5]
 };
 
