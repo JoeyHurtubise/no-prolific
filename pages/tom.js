@@ -78,7 +78,7 @@ var grid = {
 
 var words = {
   type: 'html-custom-words-response',
-  stimulus: 'What is the person (in the stimuli) thinking about?<br><br>',
+  stimulus: 'What is the person thinking?<br><br>',
   min_words: 1,
   max_words: 3,
   data: {
@@ -110,7 +110,7 @@ var gridwords_instructions = {
         allow="autoplay; fullscreen">\
       </iframe> \
     <img src="stimuli/instructions-grid.png" alt="instructions-grid" width="400"></div><p>Click on <strong>Next</strong> to continue.</p></div>',
-    '<div style="width: 1000px; height: 200px"><p>After the grid, you will be asked: <strong>"What is the person (in the stimuli) thinking about?"</strong></p><p>Please answer with <strong>1 to 3 single words</strong> (no numbers, no punctuation, no phrases) that come to mind.</p><p>Click on <strong>Next</strong> to continue.</p></div>',
+    '<div style="width: 1000px; height: 200px"><p>After the grid, you will be asked: <strong>"What is the person thinking?"</strong></p><p>Please answer with <strong>1 to 3 single words</strong> (no numbers, no punctuation, no phrases) that come to mind.</p><p>Click on <strong>Next</strong> to continue.</p></div>',
     '<p>Now we are going to do a practice trial.</p><p>You will be shown a short video. After this, the grid will be displayed, followed by the words question.</p><p>Click on <strong>Next</strong> when you are ready to start. Once you click <strong>Next</strong>, you will not be able to go back.</p>'
     ],
   show_clickable_nav: true
