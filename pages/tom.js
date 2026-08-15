@@ -59,7 +59,7 @@ var mask = {
 var grid = {
   type: 'html-custom-grid-response',
   around_grid: 'labels',
-  stimulus: "Please locate the emotion in an appropriate spot in the grid by pointing and clicking the mouse.<br>Press the <b>space bar</b> when you\'re ready to continue.<br><br>",
+  stimulus: "Please locate the spot in the grid that best matches what you think the actor feels towards you by pointing and clicking the mouse.<br>Press the <b>space bar</b> when you\'re ready to continue.<br><br>",
   grid_height: 300,
   maintain_aspect_ratio: true,
   data: {
