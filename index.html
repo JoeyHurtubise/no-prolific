@@ -41,7 +41,24 @@
         <script src="jspsych-6.3.1/plugins/jspsych-survey-text-numberonly.js"></script>
         
         <!-- Video Info -->
+         <!-- Curated core set (30 clips: 5 emotions x 6 actors) -->
          <script src="actor-video-info/selected-video-info.js"></script>
+         <!-- Full catalogue (all actors/emotions), used to draw 10 random -->
+         <!-- extra clips per participant on top of the curated core set.  -->
+         <script src="actor-video-info/01-video-info.js"></script>
+         <script src="actor-video-info/02-video-info.js"></script>
+         <script src="actor-video-info/03-video-info.js"></script>
+         <script src="actor-video-info/04-video-info.js"></script>
+         <script src="actor-video-info/05-video-info.js"></script>
+         <script src="actor-video-info/06-video-info.js"></script>
+         <script src="actor-video-info/07-video-info.js"></script>
+         <script src="actor-video-info/08-video-info.js"></script>
+         <script src="actor-video-info/09-video-info.js"></script>
+         <script src="actor-video-info/10-video-info.js"></script>
+         <script src="actor-video-info/11-video-info.js"></script>
+         <script src="actor-video-info/12-video-info.js"></script>
+         <script src="actor-video-info/13-video-info.js"></script>
+         <script src="actor-video-info/14-video-info.js"></script>
          
         <!-- Scripts -->
         <script src="pages/error.js"></script>
@@ -94,7 +111,47 @@
         pid = urlvar.PID
     };
 
-    gridwords_variables = shuffle(video_info_selected)
+    // Build the full catalogue from the per-actor video-info files loaded
+    // above, restricted to the 6 actors already used in the curated core
+    // set (numeric actor IDs 1, 9, 10, 12, 13, 14 correspond to F2, M5,
+    // F7, F5, F8, M4 respectively). This keeps the random extras within
+    // the same actor pool participants already see, and lets us convert
+    // "actor" to the same F/M code format used in the curated set below.
+    var actor_code_map = { 1: 'F2', 9: 'M5', 10: 'F7', 12: 'F5', 13: 'F8', 14: 'M4' }
+
+    var full_catalogue = []
+      .concat(video_info_01, video_info_02, video_info_03, video_info_04,
+              video_info_05, video_info_06, video_info_07, video_info_08,
+              video_info_09, video_info_10, video_info_11, video_info_12,
+              video_info_13, video_info_14)
+      .filter(function (v) { return actor_code_map.hasOwnProperty(v.actor) })
+      .map(function (v) {
+        var code = actor_code_map[v.actor]
+        return {
+          name: code + '_' + v.target_emotion,
+          player_embed_url: v.player_embed_url,
+          width: v.width,
+          height: v.height,
+          actor: code,                    // normalized to the same F/M code format as video_info_selected
+          target_emotion: v.target_emotion
+        }
+      })
+
+    // Exclude any clip already present in the curated core set
+    // (matched by Vimeo URL).
+    var selected_urls = video_info_selected.map(function (v) { return v.player_embed_url })
+    var catalogue_remainder = full_catalogue.filter(function (v) {
+      return selected_urls.indexOf(v.player_embed_url) === -1
+    })
+
+    // Draw 10 random extra clips from the remainder. This re-samples on
+    // every page load, so each participant sees a different set of 10
+    // random clips in addition to the fixed curated 30.
+    var random_extras = shuffle(catalogue_remainder).slice(0, 10)
+
+    // Combine the curated core set with the random extras, then shuffle
+    // the full set so trial order is randomized per participant.
+    gridwords_variables = shuffle(video_info_selected.concat(random_extras))
 
     // Progress bar: 2 increments per stimulus (grid + words), plus 2 attention-check
     // increments, plus 1 for demographics and 1 for consent.
