@@ -73,12 +73,12 @@ var grid = {
 }
 
 // =========================================================
-// WORDS response (new) - "what is the person thinking about?"
+// WORDS response (new) - "what does the person think about you?"
 // =========================================================
 
 var words = {
   type: 'html-custom-words-response',
-  stimulus: 'What is the person thinking?<br><br>',
+  stimulus: 'What do you think the actor is thinking about you?<br><br>',
   min_words: 1,
   max_words: 3,
   data: {
@@ -110,7 +110,7 @@ var gridwords_instructions = {
         allow="autoplay; fullscreen">\
       </iframe> \
     <img src="stimuli/instructions-grid.png" alt="instructions-grid" width="400"></div><p>Click on <strong>Next</strong> to continue.</p></div>',
-    '<div style="width: 1000px; height: 200px"><p>After the grid, the video will play again, and then you will be asked: <strong>"What is the person thinking?"</strong></p><p>Please answer with <strong>1 to 3 single words</strong> (no numbers, no punctuation, no phrases) that come to mind.</p><p>Click on <strong>Next</strong> to continue.</p></div>',
+    '<div style="width: 1000px; height: 200px"><p>After the grid, the video will play again, and then you will be asked: <strong>"What do you think the actor is thinking about you?"</strong></p><p>Please answer with <strong>1 to 3 single words</strong> (no numbers, no punctuation, no phrases) that come to mind.</p><p>Click on <strong>Next</strong> to continue.</p></div>',
     '<p>Now we are going to do a practice trial.</p><p>You will be shown a short video. After this, the grid will be displayed, then the video will play again, followed by the words question.</p><p>Click on <strong>Next</strong> when you are ready to start. Once you click <strong>Next</strong>, you will not be able to go back.</p>'
     ],
   show_clickable_nav: true
@@ -144,44 +144,13 @@ var gridwords_practice = {
 };
 
 // =========================================================
-// Between-trial breaks (unchanged)
+// Between-trial break (single break between the two blocks)
 // =========================================================
 
-var between_trials_countdown1 = {
+var between_trials_countdown = {
   type: 'html-button-response',
-  stimulus: 'You have completed the first part of the experiment.'
-    + '<br> Please take a five-minute break before moving on to the next trial.'
-    + '<p> Feel free to walk around the room and stretch. However, please make sure to return to the task'
-    + '<br> within 5 minutes, as extended delays may result in automatic withdrawal from the study.<br>Press <b>Continue</b> to proceed with the experiment.'
-    + '<p><span id="clock">5:00</span>',
-  choices: ['Continue'],
-  trial_duration: break_threshold,    // defined in index.html
-  on_load: function(){
-    var wait_time = 5 * 60 * 1000; // in milliseconds
-    var start_time = performance.now();
-    var interval = setInterval(function(){
-    var time_left = wait_time - (performance.now() - start_time);
-    var minutes = Math.floor(time_left / 1000 / 60);
-    var seconds = Math.floor((time_left - minutes*1000*60)/1000);
-    var seconds_str = seconds.toString().padStart(2,'0');
-    document.querySelector('#clock').innerHTML = minutes + ':' + seconds_str
-    if(time_left <= 0){
-        document.querySelector('#clock').innerHTML = "0:00";
-        document.querySelector('button').disabled = false;
-        clearInterval(interval);
-    }
-    }, 250)
-    },
-    on_finish: function(data) {
-    var too_long = (data.response === null);
-    if (too_long) {
-      break_timed_out = true}},
-}
-
-var between_trials_countdown2 = {
-  type: 'html-button-response',
-  stimulus: 'You have completed the second part of the experiment.'
-    + '<br> Please take a five-minute break before moving on to the next trial.'
+  stimulus: 'You have completed the first block of the experiment.'
+    + '<br> Please take a five-minute break before moving on to the second block.'
     + '<p> Feel free to walk around the room and stretch. However, please make sure to return to the task'
     + '<br> within 5 minutes, as extended delays may result in automatic withdrawal from the study.<br>Press <b>Continue</b> to proceed with the experiment.'
     + '<p><span id="clock">5:00</span>',
@@ -324,9 +293,10 @@ var check_break = {
   };
 
 // =========================================================
-// Main procedure - dynamically chunked into 6 blocks with
-// 3 attention checks and 2 breaks, based on however many
-// stimuli end up in gridwords_variables (set in index.html).
+// Main procedure - dynamically chunked into 4 parts (forming
+// 2 blocks of 2 parts each) with 2 attention checks and 1
+// break, based on however many stimuli end up in
+// gridwords_variables (set in index.html).
 //
 // NOTE: block sizes and attention-check placement below are
 // computed dynamically rather than hardcoded, since the final
@@ -338,10 +308,10 @@ var check_break = {
 
 function build_procedure_blocks(variables) {
   var total = variables.length;
-  var chunk_size = Math.ceil(total / 6);
+  var chunk_size = Math.ceil(total / 4);
 
   var blocks = [];
-  for (var i = 0; i < 6; i++) {
+  for (var i = 0; i < 4; i++) {
     var start = i * chunk_size;
     var end = Math.min(start + chunk_size, total);
     blocks.push(variables.slice(start, end));
@@ -355,9 +325,8 @@ function build_procedure_blocks(variables) {
 
   return {
     blocks: blocks,
-    ac1: ac_slice(0), // within block 1
-    ac2: ac_slice(2), // within block 3
-    ac3: ac_slice(4)  // within block 5
+    ac1: ac_slice(0), // within the first block
+    ac2: ac_slice(2)  // within the second block
   };
 }
 
@@ -383,16 +352,6 @@ var gridwords_procedure_pt4 = {
   timeline_variables: gridwords_procedure.blocks[3]
 };
 
-var gridwords_procedure_pt5 = {
-  timeline: [fixation, video, mask, grid, fixation, video, mask, words],
-  timeline_variables: gridwords_procedure.blocks[4]
-};
-
-var gridwords_procedure_pt6 = {
-  timeline: [fixation, video, mask, grid, fixation, video, mask, words],
-  timeline_variables: gridwords_procedure.blocks[5]
-};
-
 var gridwords_attention_check_procedure1 = {
   timeline: [fixation, video, mask, grid_attention_check1],
   randomize_order: false,
@@ -405,19 +364,11 @@ var gridwords_attention_check_procedure2 = {
   timeline_variables: gridwords_procedure.ac2
 };
 
-var gridwords_attention_check_procedure3 = {
-  timeline: [fixation, video, mask, grid_attention_check1],
-  randomize_order: false,
-  timeline_variables: gridwords_procedure.ac3
-};
-
 var TOM_GRIDWORDS = [
   gridwords_practice,
   gridwords_instructions_again,
   gridwords_procedure_pt1, gridwords_attention_check_procedure1, check_attention_failures,
-  gridwords_procedure_pt2, between_trials_countdown1,
+  gridwords_procedure_pt2, between_trials_countdown,
   gridwords_procedure_pt3, gridwords_attention_check_procedure2, check_attention_failures,
-  gridwords_procedure_pt4, between_trials_countdown2,
-  gridwords_procedure_pt5, gridwords_attention_check_procedure3, check_attention_failures,
-  gridwords_procedure_pt6
+  gridwords_procedure_pt4
 ]
