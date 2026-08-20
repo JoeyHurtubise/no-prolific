@@ -59,7 +59,7 @@ var mask = {
 var grid = {
   type: 'html-custom-grid-response',
   around_grid: 'labels',
-  stimulus: "Please locate the spot in the grid that best matches what you think the actor feels towards you by pointing and clicking the mouse.<br>Press the <b>space bar</b> when you\'re ready to continue.<br><br>",
+  stimulus: "Please locate the spot in the grid that best matches what you think the person feels towards you by pointing and clicking the mouse.<br>Press the <b>space bar</b> when you\'re ready to continue.<br><br>",
   grid_height: 300,
   maintain_aspect_ratio: true,
   data: {
@@ -78,7 +78,7 @@ var grid = {
 
 var words = {
   type: 'html-custom-words-response',
-  stimulus: 'In 1 word, what do you think the actor was thinking about you?<br><br>',
+  stimulus: 'In 1 word, what do you think the person was thinking about you?<br><br>',
   min_words: 1,
   max_words: 1,
   timer_seconds: 12,
@@ -111,7 +111,7 @@ var gridwords_instructions = {
         allow="autoplay; fullscreen">\
       </iframe> \
     <img src="stimuli/instructions-grid.png" alt="instructions-grid" width="400"></div><p>Click on <strong>Next</strong> to continue.</p></div>',
-    '<div style="width: 1000px; height: 200px"><p>After the grid, the video will play again, and then you will be asked: <strong>"In 1 word, what do you think the actor was thinking about you?"</strong></p><p>Please answer with <strong>1 single word</strong> (no numbers, no punctuation, no phrases) that comes to mind. You will have <strong>12 seconds</strong> to respond, shown by a countdown below the answer box; when the countdown reaches 0, you will automatically move on to the next video.</p><p>Click on <strong>Next</strong> to continue.</p></div>',
+    '<div style="width: 1000px; height: 200px"><p>After the grid, the video will play again, and then you will be asked: <strong>"In 1 word, what do you think the person was thinking about you?"</strong></p><p>Please answer with <strong>1 single word</strong> (no numbers, no punctuation, no phrases) that comes to mind. You will have <strong>12 seconds</strong> to respond, shown by a countdown below the answer box; when the countdown reaches 0, you will automatically move on to the next video.</p><p>Click on <strong>Next</strong> to continue.</p></div>',
     '<p>Now we are going to do a practice trial.</p><p>You will be shown a short video. After this, the grid will be displayed, then the video will play again, followed by the words question.</p><p>Click on <strong>Next</strong> when you are ready to start. Once you click <strong>Next</strong>, you will not be able to go back.</p>'
     ],
   show_clickable_nav: true
