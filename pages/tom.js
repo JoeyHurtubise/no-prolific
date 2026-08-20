@@ -78,9 +78,10 @@ var grid = {
 
 var words = {
   type: 'html-custom-words-response',
-  stimulus: 'What do you think the actor is thinking about you?<br><br>',
+  stimulus: 'In 1 word, what do you think the actor was thinking about you?<br><br>',
   min_words: 1,
-  max_words: 3,
+  max_words: 1,
+  timer_seconds: 12,
   data: {
     trial: 'tom-words',
     actor: jsPsych.timelineVariable('actor'),
@@ -98,7 +99,7 @@ var words = {
 var gridwords_instructions = {
   type: 'instructions',
   pages: [
-    '<div style="width: 1000px; height: 220px"><p>This test will investigate your ability to read emotion and infer mental states from an expression.</p><p>You will be shown a short video demonstrating an expression. After each video, you will do three things: first, place a mark on a grid describing the emotion; second, watch the same video again; third, type 1 to 3 words describing what you think the person is thinking about.</p><p>Click on <strong>Next</strong> to see an example.</p></div>',
+    '<div style="width: 1000px; height: 220px"><p>This test will investigate your ability to read emotion and infer mental states from an expression.</p><p>You will be shown a short video demonstrating an expression. After each video, you will do three things: first, place a mark on a grid describing the emotion; second, watch the same video again; third, type 1 word describing what you think the person is thinking about, within 12 seconds.</p><p>Click on <strong>Next</strong> to see an example.</p></div>',
     '<div style="width: 1000px; height: 600px;"> \
     <p>Here is an example of a valence-arousal grid. Clicking somewhere in the upper right quadrant would mean that you consider this expression to be more positive and higher arousal.</p> \
     <div style="display: flex; align-items: center; justify-content: space-between;"> \
@@ -110,7 +111,7 @@ var gridwords_instructions = {
         allow="autoplay; fullscreen">\
       </iframe> \
     <img src="stimuli/instructions-grid.png" alt="instructions-grid" width="400"></div><p>Click on <strong>Next</strong> to continue.</p></div>',
-    '<div style="width: 1000px; height: 200px"><p>After the grid, the video will play again, and then you will be asked: <strong>"What do you think the actor is thinking about you?"</strong></p><p>Please answer with <strong>1 to 3 single words</strong> (no numbers, no punctuation, no phrases) that come to mind.</p><p>Click on <strong>Next</strong> to continue.</p></div>',
+    '<div style="width: 1000px; height: 200px"><p>After the grid, the video will play again, and then you will be asked: <strong>"In 1 word, what do you think the actor was thinking about you?"</strong></p><p>Please answer with <strong>1 single word</strong> (no numbers, no punctuation, no phrases) that comes to mind. You will have <strong>12 seconds</strong> to respond, shown by a countdown below the answer box; when the countdown reaches 0, you will automatically move on to the next video.</p><p>Click on <strong>Next</strong> to continue.</p></div>',
     '<p>Now we are going to do a practice trial.</p><p>You will be shown a short video. After this, the grid will be displayed, then the video will play again, followed by the words question.</p><p>Click on <strong>Next</strong> when you are ready to start. Once you click <strong>Next</strong>, you will not be able to go back.</p>'
     ],
   show_clickable_nav: true
@@ -118,7 +119,7 @@ var gridwords_instructions = {
 
 var gridwords_instructions_again = {
   type: 'html-button-response',
-  stimulus: '<div style="width: 1000px; height: 70px"><p>You will now be shown a series of short videos. After each one, please rate it on the grid, watch the video again, then type 1 to 3 words describing what the person is thinking about, as you did in the practice trials. Starting now, your responses will be recorded.</p><p>Click <strong>Continue</strong> to start. Good luck!</p></div>',
+  stimulus: '<div style="width: 1000px; height: 70px"><p>You will now be shown a series of short videos. After each one, please rate it on the grid, watch the video again, then type 1 word describing what the person is thinking about within 12 seconds, as you did in the practice trials. Starting now, your responses will be recorded.</p><p>Click <strong>Continue</strong> to start. Good luck!</p></div>',
   choices: ['Continue'],
   data: {trial:false},
   margin_vertical: '80px'
