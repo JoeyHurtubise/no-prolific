@@ -53,53 +53,93 @@ var mask = {
 };
 
 // =========================================================
-// GRID response (valence/arousal) - unchanged from prior version
+// PROMPTS
+// ---------------------------------------------------------
+// The two main sections use the same two tasks (grid + words)
+// but a different question:
+//   Section 1 = regular theory-of-mind question
+//   Section 2 = metaperception question
+// The practice trial keeps the longer, task-specific instructions.
 // =========================================================
 
-var grid = {
-  type: 'html-custom-grid-response',
-  around_grid: 'labels',
-  stimulus: "Please locate the spot in the grid that best matches what you think the person feels towards you by pointing and clicking the mouse.<br>Press the <b>space bar</b> when you\'re ready to continue.<br><br>",
-  grid_height: 300,
-  maintain_aspect_ratio: true,
-  data: {
-    trial: 'tom-grid',
-    actor: jsPsych.timelineVariable('actor'),
-    target_emotion: jsPsych.timelineVariable('target_emotion')
-  },
-  on_finish: function () {
-    jsPsych.setProgressBar(jsPsych.getProgressBarCompleted() + (1 / PROGRESS_BAR_N))
+var PROMPT_TOM  = 'What do you think the person is thinking?'
+var PROMPT_META = 'What do you think the person is thinking about you?'
+
+// =========================================================
+// GRID response (valence/arousal)
+// make_grid(prompt_html, section) returns one grid trial.
+// =========================================================
+
+function make_grid(prompt_html, section) {
+  return {
+    type: 'html-custom-grid-response',
+    around_grid: 'labels',
+    stimulus: prompt_html + '<br><br>',
+    grid_height: 300,
+    maintain_aspect_ratio: true,
+    data: {
+      trial: 'tom-grid',
+      section: section,
+      actor: jsPsych.timelineVariable('actor'),
+      target_emotion: jsPsych.timelineVariable('target_emotion')
+    },
+    on_finish: function () {
+      jsPsych.setProgressBar(jsPsych.getProgressBarCompleted() + (1 / PROGRESS_BAR_N))
+    }
   }
 }
 
 // =========================================================
-// WORDS response (new) - "what does the person think about you?"
+// WORDS response (2 to 3 words)
+// make_words(prompt_html, section) returns one words trial.
 // =========================================================
 
-var words = {
-  type: 'html-custom-words-response',
-  stimulus: 'In 1 word, what do you think the person was thinking about you?<br><br>',
-  min_words: 1,
-  max_words: 1,
-  timer_seconds: 12,
-  data: {
-    trial: 'tom-words',
-    actor: jsPsych.timelineVariable('actor'),
-    target_emotion: jsPsych.timelineVariable('target_emotion')
-  },
-  on_finish: function () {
-    jsPsych.setProgressBar(jsPsych.getProgressBarCompleted() + (1 / PROGRESS_BAR_N))
+function make_words(prompt_html, section) {
+  return {
+    type: 'html-custom-words-response',
+    stimulus: prompt_html + '<br><br>',
+    min_words: 2,
+    max_words: 3,
+    timer_seconds: 12,
+    data: {
+      trial: 'tom-words',
+      section: section,
+      actor: jsPsych.timelineVariable('actor'),
+      target_emotion: jsPsych.timelineVariable('target_emotion')
+    },
+    on_finish: function () {
+      jsPsych.setProgressBar(jsPsych.getProgressBarCompleted() + (1 / PROGRESS_BAR_N))
+    }
   }
 }
 
+// Practice version: question + task instructions
+var grid_practice = make_grid(
+  PROMPT_TOM
+  + '<br>Please locate the spot in the grid that best matches your impression by pointing and clicking the mouse.'
+  + '<br>Press the <b>space bar</b> when you\'re ready to continue.',
+  'practice')
+
+var words_practice = make_words(
+  'In 2 to 3 words, what do you think the person is thinking?',
+  'practice')
+
+// Section 1 (theory of mind): short prompt, same for both tasks
+var grid_tom  = make_grid(PROMPT_TOM, 'tom')
+var words_tom = make_words(PROMPT_TOM, 'tom')
+
+// Section 2 (metaperception): short prompt, same for both tasks
+var grid_meta  = make_grid(PROMPT_META, 'metaperception')
+var words_meta = make_words(PROMPT_META, 'metaperception')
+
 // =========================================================
-// Instructions
+// Instructions (shown once, at the beginning)
 // =========================================================
 
 var gridwords_instructions = {
   type: 'instructions',
   pages: [
-    '<div style="width: 1000px; height: 220px"><p>This test will investigate your ability to read emotion and infer mental states from an expression.</p><p>You will be shown a short video demonstrating an expression. After each video, you will do three things: first, place a mark on a grid describing the emotion; second, watch the same video again; third, type 1 word describing what you think the person is thinking about, within 12 seconds.</p><p>Click on <strong>Next</strong> to see an example.</p></div>',
+    '<div style="width: 1000px; height: 300px"><p>This test will investigate your ability to read emotion and infer mental states from an expression.</p><p>You will be shown a short video demonstrating an expression. After each video, you will do three things: first, place a mark on a grid describing the emotion; second, watch the same video again; third, type 2 to 3 words describing what you think the person is thinking, within 12 seconds.</p><p>The experiment has two sections with the same tasks. The question you are asked will differ slightly between the two sections, and you will be told when it changes.</p><p>Click on <strong>Next</strong> to see an example.</p></div>',
     '<div style="width: 1000px; height: 600px;"> \
     <p>Here is an example of a valence-arousal grid. Clicking somewhere in the upper right quadrant would mean that you consider this expression to be more positive and higher arousal.</p> \
     <div style="display: flex; align-items: center; justify-content: space-between;"> \
@@ -111,7 +151,7 @@ var gridwords_instructions = {
         allow="autoplay; fullscreen">\
       </iframe> \
     <img src="stimuli/instructions-grid.png" alt="instructions-grid" width="400"></div><p>Click on <strong>Next</strong> to continue.</p></div>',
-    '<div style="width: 1000px; height: 200px"><p>After the grid, the video will play again, and then you will be asked: <strong>"In 1 word, what do you think the person was thinking about you?"</strong></p><p>Please answer with <strong>1 single word</strong> (no numbers, no punctuation, no phrases) that comes to mind. You will have <strong>12 seconds</strong> to respond, shown by a countdown below the answer box; when the countdown reaches 0, you will automatically move on to the next video.</p><p>Click on <strong>Next</strong> to continue.</p></div>',
+    '<div style="width: 1000px; height: 300px"><p>After the grid, the video will play again, and then you will be asked: <strong>"In 2 to 3 words, what do you think the person is thinking?"</strong></p><p>Please answer with <strong>2 to 3 words</strong> (letters only: no numbers or punctuation) that come to mind. You will have <strong>12 seconds</strong> to respond, shown by a countdown below the answer box; when the countdown reaches 0, you will automatically move on to the next video.</p><p>In the main experiment, the question will be shortened to <strong>"What do you think the person is thinking?"</strong>, but you should still answer with 2 to 3 words.</p><p>Click on <strong>Next</strong> to continue.</p></div>',
     '<p>Now we are going to do a practice trial.</p><p>You will be shown a short video. After this, the grid will be displayed, then the video will play again, followed by the words question.</p><p>Click on <strong>Next</strong> when you are ready to start. Once you click <strong>Next</strong>, you will not be able to go back.</p>'
     ],
   show_clickable_nav: true
@@ -119,7 +159,7 @@ var gridwords_instructions = {
 
 var gridwords_instructions_again = {
   type: 'html-button-response',
-  stimulus: '<div style="width: 1000px; height: 70px"><p>You will now be shown a series of short videos. After each one, please rate it on the grid, watch the video again, then type 1 word describing what the person is thinking about within 12 seconds, as you did in the practice trials. Starting now, your responses will be recorded.</p><p>Click <strong>Continue</strong> to start. Good luck!</p></div>',
+  stimulus: '<div style="width: 1000px; height: 120px"><p>You will now begin <strong>Section 1</strong>. You will be shown a series of short videos. After each one, please rate it on the grid (press the <strong>space bar</strong> to confirm your choice), watch the video again, then type 2 to 3 words describing what the person is thinking within 12 seconds, as you did in the practice trial. Starting now, your responses will be recorded.</p><p>Click <strong>Continue</strong> to start. Good luck!</p></div>',
   choices: ['Continue'],
   data: {trial:false},
   margin_vertical: '80px'
@@ -129,7 +169,7 @@ var gridwords_instructions_again = {
 // Practice trial
 // =========================================================
 
-var gridwords_practice_trial = [grid, fixation, video, mask, words];
+var gridwords_practice_trial = [grid_practice, fixation, video, mask, words_practice];
 
 var PRACTICE_VIDEO = [{
   "name": "12_distrustful_3sec",
@@ -145,39 +185,65 @@ var gridwords_practice = {
 };
 
 // =========================================================
-// Between-trial break (single break between the two blocks)
+// Breaks (3 in total):
+//   1) middle of Section 1
+//   2) between Section 1 and Section 2
+//   3) middle of Section 2
+// make_break(intro_html) builds one 5-minute break screen with
+// the given opening message; the rest of the text is shared.
 // =========================================================
 
-var between_trials_countdown = {
-  type: 'html-button-response',
-  stimulus: 'You have completed the first block of the experiment.'
-    + '<br> Please take a five-minute break before moving on to the second block.'
-    + '<p> Feel free to walk around the room and stretch. However, please make sure to return to the task'
-    + '<br> within 5 minutes, as extended delays may result in automatic withdrawal from the study.<br>Press <b>Continue</b> to proceed with the experiment.'
-    + '<p><span id="clock">5:00</span>',
-  choices: ['Continue'],
-  trial_duration: break_threshold,    // defined in index.html
-  on_load: function(){
-    var wait_time = 5 * 60 * 1000; // in milliseconds
-    var start_time = performance.now();
-    var interval = setInterval(function(){
-    var time_left = wait_time - (performance.now() - start_time);
-    var minutes = Math.floor(time_left / 1000 / 60);
-    var seconds = Math.floor((time_left - minutes*1000*60)/1000);
-    var seconds_str = seconds.toString().padStart(2,'0');
-    document.querySelector('#clock').innerHTML = minutes + ':' + seconds_str
-    if(time_left <= 0){
-        document.querySelector('#clock').innerHTML = "0:00";
-        document.querySelector('button').disabled = false;
-        clearInterval(interval);
-    }
-    }, 250)
+function make_break(intro_html) {
+  var break_interval = null;
+  return {
+    type: 'html-button-response',
+    stimulus: intro_html
+      + '<p> Feel free to walk around the room and stretch. However, please make sure to return to the task'
+      + '<br> within 5 minutes, as extended delays may result in automatic withdrawal from the study.<br>Press <b>Continue</b> to proceed with the experiment.'
+      + '<p><span id="clock">5:00</span>',
+    choices: ['Continue'],
+    trial_duration: break_threshold,    // defined in index.html
+    on_load: function(){
+      var wait_time = 5 * 60 * 1000; // in milliseconds
+      var break_start = performance.now();
+      break_interval = setInterval(function(){
+        var clock = document.querySelector('#clock');
+        if (!clock) { clearInterval(break_interval); return; }
+        var time_left = wait_time - (performance.now() - break_start);
+        var minutes = Math.floor(time_left / 1000 / 60);
+        var seconds = Math.floor((time_left - minutes*1000*60)/1000);
+        var seconds_str = seconds.toString().padStart(2,'0');
+        clock.innerHTML = minutes + ':' + seconds_str
+        if(time_left <= 0){
+          clock.innerHTML = "0:00";
+          document.querySelector('button').disabled = false;
+          clearInterval(break_interval);
+        }
+      }, 250)
     },
     on_finish: function(data) {
-    var too_long = (data.response === null);
-    if (too_long) {
-      break_timed_out = true}},
+      if (break_interval) { clearInterval(break_interval); }
+      var too_long = (data.response === null);
+      if (too_long) {
+        break_timed_out = true
+      }
+    }
+  }
 }
+
+var break_mid_section1 = make_break(
+  'You have completed the first half of Section 1 of the experiment.'
+  + '<br> Please take a five-minute break before moving on to the second half of Section 1.')
+
+var break_between_sections = make_break(
+  'You have completed Section 1 of the experiment.'
+  + '<br> Please take a five-minute break before moving on to Section 2.'
+  + '<p>In Section 2, the tasks are the same, but the question will change: you will now be asked what you think the person is thinking <strong>about you</strong>.</p>')
+
+var break_mid_section2 = make_break(
+  'You have completed the first half of Section 2 of the experiment.'
+  + '<br> Please take a five-minute break before moving on to the second half of Section 2.')
+
 
 // =========================================================
 // Attention checks - grid-only (unchanged mechanics), no words step
@@ -294,10 +360,19 @@ var check_break = {
   };
 
 // =========================================================
-// Main procedure - dynamically chunked into 4 parts (forming
-// 2 blocks of 2 parts each) with 2 attention checks and 1
-// break, based on however many stimuli end up in
-// gridwords_variables (set in index.html).
+// Main procedure - the stimuli in gridwords_variables (set in
+// index.html) are dynamically chunked into 4 parts:
+//
+//   SECTION 1 (theory of mind: "...thinking?")
+//       part 1 -> attention check 1 -> BREAK 1 -> part 2
+//   BREAK 2 (between sections)
+//   SECTION 2 (metaperception: "...thinking about you?")
+//       part 3 -> attention check 2 -> BREAK 3 -> part 4
+//
+// Each participant sees every video once: parts 1-2 (first half
+// of the stimuli) are shown in Section 1, parts 3-4 in Section 2.
+// The stimulus order is already randomized per participant in
+// index.html.
 //
 // NOTE: block sizes and attention-check placement below are
 // computed dynamically rather than hardcoded, since the final
@@ -326,30 +401,32 @@ function build_procedure_blocks(variables) {
 
   return {
     blocks: blocks,
-    ac1: ac_slice(0), // within the first block
-    ac2: ac_slice(2)  // within the second block
+    ac1: ac_slice(0), // within Section 1
+    ac2: ac_slice(2)  // within Section 2
   };
 }
 
 var gridwords_procedure = build_procedure_blocks(gridwords_variables);
 
+// Section 1 trials (theory of mind prompt)
 var gridwords_procedure_pt1 = {
-  timeline: [fixation, video, mask, grid, fixation, video, mask, words],
+  timeline: [fixation, video, mask, grid_tom, fixation, video, mask, words_tom],
   timeline_variables: gridwords_procedure.blocks[0]
 };
 
 var gridwords_procedure_pt2 = {
-  timeline: [fixation, video, mask, grid, fixation, video, mask, words],
+  timeline: [fixation, video, mask, grid_tom, fixation, video, mask, words_tom],
   timeline_variables: gridwords_procedure.blocks[1]
 };
 
+// Section 2 trials (metaperception prompt)
 var gridwords_procedure_pt3 = {
-  timeline: [fixation, video, mask, grid, fixation, video, mask, words],
+  timeline: [fixation, video, mask, grid_meta, fixation, video, mask, words_meta],
   timeline_variables: gridwords_procedure.blocks[2]
 };
 
 var gridwords_procedure_pt4 = {
-  timeline: [fixation, video, mask, grid, fixation, video, mask, words],
+  timeline: [fixation, video, mask, grid_meta, fixation, video, mask, words_meta],
   timeline_variables: gridwords_procedure.blocks[3]
 };
 
@@ -368,8 +445,17 @@ var gridwords_attention_check_procedure2 = {
 var TOM_GRIDWORDS = [
   gridwords_practice,
   gridwords_instructions_again,
+
+  // ---------- SECTION 1: theory of mind ----------
   gridwords_procedure_pt1, gridwords_attention_check_procedure1, check_attention_failures,
-  gridwords_procedure_pt2, between_trials_countdown,
+  break_mid_section1,
+  gridwords_procedure_pt2,
+
+  // ---------- break between sections ----------
+  break_between_sections,
+
+  // ---------- SECTION 2: metaperception ----------
   gridwords_procedure_pt3, gridwords_attention_check_procedure2, check_attention_failures,
+  break_mid_section2,
   gridwords_procedure_pt4
 ]
