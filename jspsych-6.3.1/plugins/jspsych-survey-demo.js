@@ -708,7 +708,39 @@ jsPsych.plugins['survey-demo'] = (function() {
     html += '<input type="number" name="yearsresidence" min="1" max="100" size="20" required>';
     html += '</div></div>';
 
-    // Item 8: Internet Speed
+    // Item 8a: Participant born in the USA?
+    html += '<div class="survey-demo-row">';
+    html += '<div class="survey-demo-prompt"><label for="bornusa">Were you born in the United States of America?</label></div>';
+    html += '<div class="survey-demo-response">';
+    html += '<label><input type="radio" name="bornusa" value="Yes" required>Yes</label><br>';
+    html += '<label><input type="radio" name="bornusa" value="No" required>No</label>';
+    html += '</div></div>';
+
+    // Item 8b: Parents born in the USA?
+    html += '<div class="survey-demo-row">';
+    html += '<div class="survey-demo-prompt"><label for="parentsbornusa">Were your parents born in the United States of America?</label></div>';
+    html += '<div class="survey-demo-response">';
+    html += '<label><input type="radio" name="parentsbornusa" value="Both parents" required>Yes, both of my parents</label><br>';
+    html += '<label><input type="radio" name="parentsbornusa" value="One parent" required>Yes, one of my parents</label><br>';
+    html += '<label><input type="radio" name="parentsbornusa" value="Neither parent" required>No, neither of my parents</label><br>';
+    html += '<label><input type="radio" name="parentsbornusa" value="Not sure" required>I am not sure</label>';
+    html += '</div></div>';
+
+    // Item 8c: Socioeconomic standing (census-style: total household income from all sources, before taxes)
+    html += '<div class="survey-demo-row">';
+    html += '<div class="survey-demo-prompt"><label for="householdincome">What was your total household income in the last year, from all sources and before taxes and deductions? <small>(Include the income of everyone living in your household. If not in US dollars, please select the closest equivalent.)</small></label></div>';
+    html += '<div class="survey-demo-response">';
+    html += '<label><input type="radio" name="householdincome" value="Under 20,000" required>Under $20,000</label><br>';
+    html += '<label><input type="radio" name="householdincome" value="20,000 to 39,999" required>$20,000 to $39,999</label><br>';
+    html += '<label><input type="radio" name="householdincome" value="40,000 to 59,999" required>$40,000 to $59,999</label><br>';
+    html += '<label><input type="radio" name="householdincome" value="60,000 to 79,999" required>$60,000 to $79,999</label><br>';
+    html += '<label><input type="radio" name="householdincome" value="80,000 to 99,999" required>$80,000 to $99,999</label><br>';
+    html += '<label><input type="radio" name="householdincome" value="100,000 to 149,999" required>$100,000 to $149,999</label><br>';
+    html += '<label><input type="radio" name="householdincome" value="150,000 or more" required>$150,000 or more</label><br>';
+    html += '<label><input type="radio" name="householdincome" value="Prefer not to answer" required>Prefer not to answer</label>';
+    html += '</div></div>';
+
+    // Item 9: Internet Speed
     html += '<div class="survey-demo-row">';
     html += '<div class="survey-demo-prompt"><label for="internetspeed">Please check your internet speed at <a href="https://fast.com/en/gb/" target="_blank">this link</a>. Enter your internet speed in Mbps (whole numbers only).</label></div>';
     html += '<div class="survey-demo-response">';

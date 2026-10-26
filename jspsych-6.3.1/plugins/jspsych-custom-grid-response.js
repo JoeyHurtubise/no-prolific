@@ -45,6 +45,12 @@ jsPsych.plugins['html-custom-grid-response'] = (function () {
                 default: false,
                 description: 'Whether feedback is displayed or not'
             },
+            timer_seconds: {
+                type: jsPsych.plugins.parameterType.INT,
+                pretty_name: 'Timer seconds',
+                default: null,
+                description: 'If set, a countdown (in seconds) is displayed below the grid. When it reaches 0 the trial ends automatically, recording the last click (if any).'
+            },
 
 
      
@@ -85,7 +91,11 @@ jsPsych.plugins['html-custom-grid-response'] = (function () {
 
         grid_html += "<body onload='draw()'> <div class='container'> <div id='top'>" + top + "</div> <div class='middle'> <div id='center_left'>" + left + "</div> <div id='mid'>"
         grid_html += "<div id='field' > <canvas id='canvas' width='300' height='300'></canvas> </div></div> <div id='center_right'>" + right + "</div> </div>"
-        grid_html += "<div id='bottom'>" + bottom + "</div> </div>  <br> <div id='feedback' class='feedback'> <br> </div> <br></body> </html>"
+        grid_html += "<div id='bottom'>" + bottom + "</div> </div>  <br>"
+        if (trial.timer_seconds) {
+            grid_html += "<div id='grid-timer' style='font-size: 28px; font-weight: bold; margin-top: 6px;'>" + trial.timer_seconds + "</div>"
+        }
+        grid_html += "<div id='feedback' class='feedback'> <br> </div> <br></body> </html>"
 
         display_element.innerHTML = grid_html;
 
@@ -142,10 +152,33 @@ jsPsych.plugins['html-custom-grid-response'] = (function () {
             stimulus: null,
             rt: null,
             x: null,
-            y: null
+            y: null,
+            timed_out: false
         }
 
         var clicked_already = false;
+
+        //Countdown timer (optional): ends the trial automatically at 0
+        var countdown_interval = null;
+        if (trial.timer_seconds) {
+            var seconds_left = trial.timer_seconds;
+            countdown_interval = setInterval(function () {
+                seconds_left -= 1;
+                var timer_el = document.getElementById('grid-timer');
+                if (seconds_left <= 0) {
+                    if (timer_el) { timer_el.innerHTML = '0'; }
+                    results.timed_out = true;
+                    if (results.rt === null) {
+                        // no click was made: record the time spent on the trial
+                        results.rt = performance.now() - start_time;
+                    }
+                    results.stimulus = trial.stimulus;
+                    end_trial();
+                } else if (timer_el) {
+                    timer_el.innerHTML = seconds_left;
+                }
+            }, 1000);
+        }
 
         //Function to handle mouse click responses
         var after_response = function (x_coords, y_coords, left, top) {
@@ -254,6 +287,7 @@ jsPsych.plugins['html-custom-grid-response'] = (function () {
         var end_trial = function () {
 
             //Get rid of screen traces, timeouts, listeners...
+            if (countdown_interval) { clearInterval(countdown_interval); }
             $('#point').remove();
             jsPsych.pluginAPI.clearAllTimeouts();
             document.removeEventListener('click', click_listener);

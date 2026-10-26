@@ -97,7 +97,6 @@
     var start_time = Date.now()
 
     // Initialize variables 
-    var gridwords_variables = ''
     var timeline            = []
 
     // Run style
@@ -149,13 +148,33 @@
     // random clips in addition to the fixed curated 30.
     var random_extras = shuffle(catalogue_remainder).slice(0, 10)
 
-    // Combine the curated core set with the random extras, then shuffle
-    // the full set so trial order is randomized per participant.
-    gridwords_variables = shuffle(video_info_selected.concat(random_extras))
+    // ------------------------------------------------------------
+    // Stimulus set shared by BOTH sections
+    // ------------------------------------------------------------
+    // The same 20 stimuli are used in Section 1 (regular ToM question)
+    // and Section 2 (metaperception question) so the two sections can
+    // be compared. The set is drawn once per participant, then each
+    // section gets its own independent random order.
+    var N_STIMULI_PER_SECTION = 20
 
-    // Progress bar: 2 increments per stimulus (grid + words), plus 2 attention-check
-    // increments, plus 1 for demographics and 1 for consent.
-    var PROGRESS_BAR_N = (gridwords_variables.length * 2) + 2 + 2
+    var stimulus_pool = shuffle(video_info_selected.concat(random_extras))
+    var section_stimulus_set = stimulus_pool.slice(0, N_STIMULI_PER_SECTION)
+
+    function same_order(a, b) {
+      for (var i = 0; i < a.length; i++) { if (a[i] !== b[i]) return false }
+      return true
+    }
+
+    var section1_stimuli = shuffle(section_stimulus_set.slice())
+    var section2_stimuli = shuffle(section_stimulus_set.slice())
+    // make sure Section 2 is not accidentally in the exact same order as Section 1
+    while (section_stimulus_set.length > 1 && same_order(section1_stimuli, section2_stimuli)) {
+      section2_stimuli = shuffle(section2_stimuli)
+    }
+
+    // Progress bar: 2 increments per stimulus per section (grid + words),
+    // plus 2 attention-check increments, plus 1 for demographics and 1 for consent.
+    var PROGRESS_BAR_N = (N_STIMULI_PER_SECTION * 2 * 2) + 2 + 2
 
  </script>
 

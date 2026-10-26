@@ -1,8 +1,10 @@
 /**
  * html-custom-words-response
- * a custom plugin for free-text responses restricted to a configurable number of
- * single alphabetic words (min_words/max_words), with an optional countdown timer
- * (timer_seconds) that forces the trial to end when time runs out.
+ * a custom plugin for free-text responses with a minimum number of words
+ * (min_words, default 1) and an optional maximum (max_words; null = no maximum).
+ * There are no restrictions on the characters used (numbers and punctuation are
+ * allowed). An optional countdown timer (timer_seconds) forces the trial to end
+ * when time runs out.
  *
  * Structural conventions mirrored from jspsych-custom-grid-response.js
  * (Hector Leos, McGill University)
@@ -37,8 +39,8 @@ jsPsych.plugins['html-custom-words-response'] = (function () {
             max_words: {
                 type: jsPsych.plugins.parameterType.INT,
                 pretty_name: 'Maximum words',
-                default: 3,
-                description: 'Maximum number of words allowed.'
+                default: null,
+                description: 'Maximum number of words allowed. null (default) means no maximum.'
             },
             timer_seconds: {
                 type: jsPsych.plugins.parameterType.INT,
@@ -95,28 +97,26 @@ jsPsych.plugins['html-custom-words-response'] = (function () {
             }, 1000);
         }
 
-        // Splits on whitespace and/or commas, drops empty tokens, checks count and
-        // that every token is letters-only (no digits, punctuation, or multi-word phrases).
+        // Splits on whitespace and drops empty tokens. Only the number of words is
+        // checked: there is no maximum (unless max_words is set) and no restriction
+        // on numbers or punctuation.
         function parse_and_validate(raw) {
-            var tokens = raw.split(/[\s,]+/).filter(function (t) { return t.length > 0; });
+            var tokens = raw.split(/\s+/).filter(function (t) { return t.length > 0; });
 
-            if (tokens.length < min_words || tokens.length > max_words) {
+            if (tokens.length < min_words) {
                 return {
                     valid: false,
                     tokens: tokens,
-                    error: 'Please enter between ' + min_words + ' and ' + max_words + ' word' + (max_words > 1 ? 's' : '') + '.'
+                    error: 'Please enter at least ' + min_words + ' word' + (min_words > 1 ? 's' : '') + '.'
                 };
             }
 
-            var word_pattern = /^[A-Za-z]+$/;
-            for (var i = 0; i < tokens.length; i++) {
-                if (!word_pattern.test(tokens[i])) {
-                    return {
-                        valid: false,
-                        tokens: tokens,
-                        error: 'Please use single words with letters only (no numbers or punctuation).'
-                    };
-                }
+            if (max_words !== null && max_words !== undefined && tokens.length > max_words) {
+                return {
+                    valid: false,
+                    tokens: tokens,
+                    error: 'Please enter no more than ' + max_words + ' word' + (max_words > 1 ? 's' : '') + '.'
+                };
             }
 
             return { valid: true, tokens: tokens, error: null };

@@ -62,8 +62,17 @@ var mask = {
 // The practice trial keeps the longer, task-specific instructions.
 // =========================================================
 
+// Grid prompts (valence/arousal task)
 var PROMPT_TOM  = 'What do you think the person is thinking?'
-var PROMPT_META = 'What do you think the person is thinking about you?'
+var PROMPT_META = 'What do you think the person is thinking <b><u>about you</u></b>?'
+
+// Free-label (words) prompts: participants type "a few words"
+var PROMPT_TOM_WORDS  = 'In a few words, what do you think the person is thinking?'
+var PROMPT_META_WORDS = 'In a few words, what do you think the person is thinking <b><u>about you</u></b>?'
+
+// Timers (in seconds)
+var GRID_TIMER_SECONDS  = 10
+var WORDS_TIMER_SECONDS = 18
 
 // =========================================================
 // GRID response (valence/arousal)
@@ -77,6 +86,7 @@ function make_grid(prompt_html, section) {
     stimulus: prompt_html + '<br><br>',
     grid_height: 300,
     maintain_aspect_ratio: true,
+    timer_seconds: GRID_TIMER_SECONDS,
     data: {
       trial: 'tom-grid',
       section: section,
@@ -90,7 +100,8 @@ function make_grid(prompt_html, section) {
 }
 
 // =========================================================
-// WORDS response (2 to 3 words)
+// WORDS response (a few words: minimum 1 word, no maximum,
+// no restriction on numbers/punctuation, 18-second timer)
 // make_words(prompt_html, section) returns one words trial.
 // =========================================================
 
@@ -98,9 +109,9 @@ function make_words(prompt_html, section) {
   return {
     type: 'html-custom-words-response',
     stimulus: prompt_html + '<br><br>',
-    min_words: 2,
-    max_words: 3,
-    timer_seconds: 12,
+    min_words: 1,
+    max_words: null,
+    timer_seconds: WORDS_TIMER_SECONDS,
     data: {
       trial: 'tom-words',
       section: section,
@@ -117,20 +128,18 @@ function make_words(prompt_html, section) {
 var grid_practice = make_grid(
   PROMPT_TOM
   + '<br>Please locate the spot in the grid that best matches your impression by pointing and clicking the mouse.'
-  + '<br>Press the <b>space bar</b> when you\'re ready to continue.',
+  + '<br>You have <b>10 seconds</b> (shown by the countdown below the grid). Press the <b>space bar</b> to confirm your choice, or wait for the countdown to finish.',
   'practice')
 
-var words_practice = make_words(
-  'In 2 to 3 words, what do you think the person is thinking?',
-  'practice')
+var words_practice = make_words(PROMPT_TOM_WORDS, 'practice')
 
-// Section 1 (theory of mind): short prompt, same for both tasks
+// Section 1 (theory of mind)
 var grid_tom  = make_grid(PROMPT_TOM, 'tom')
-var words_tom = make_words(PROMPT_TOM, 'tom')
+var words_tom = make_words(PROMPT_TOM_WORDS, 'tom')
 
-// Section 2 (metaperception): short prompt, same for both tasks
+// Section 2 (metaperception)
 var grid_meta  = make_grid(PROMPT_META, 'metaperception')
-var words_meta = make_words(PROMPT_META, 'metaperception')
+var words_meta = make_words(PROMPT_META_WORDS, 'metaperception')
 
 // =========================================================
 // Instructions (shown once, at the beginning)
@@ -139,9 +148,10 @@ var words_meta = make_words(PROMPT_META, 'metaperception')
 var gridwords_instructions = {
   type: 'instructions',
   pages: [
-    '<div style="width: 1000px; height: 300px"><p>This test will investigate your ability to read emotion and infer mental states from an expression.</p><p>You will be shown a short video demonstrating an expression. After each video, you will do three things: first, place a mark on a grid describing the emotion; second, watch the same video again; third, type 2 to 3 words describing what you think the person is thinking, within 12 seconds.</p><p>The experiment has two sections with the same tasks. The question you are asked will differ slightly between the two sections, and you will be told when it changes.</p><p>Click on <strong>Next</strong> to see an example.</p></div>',
-    '<div style="width: 1000px; height: 600px;"> \
+    '<div style="width: 1000px; height: 300px"><p>This test will investigate your ability to read emotion and infer mental states from an expression.</p><p>You will be shown a short video demonstrating an expression. After each video, you will do three things: first, place a mark on a grid describing the emotion, within <strong>10 seconds</strong>; second, watch the same video again; third, type a few words describing what you think the person is thinking, within <strong>18 seconds</strong>.</p><p>The experiment has two sections with the same tasks. The question you are asked will differ slightly between the two sections, and you will be told when it changes.</p><p>Click on <strong>Next</strong> to see an example.</p></div>',
+    '<div style="width: 1000px; height: 700px;"> \
     <p>Here is an example of a valence-arousal grid. Clicking somewhere in the upper right quadrant would mean that you consider this expression to be more positive and higher arousal.</p> \
+    <p>You will have <strong>10 seconds</strong> to make your selection, shown by a countdown below the grid. Press the <strong>space bar</strong> to confirm your choice; when the countdown reaches 0, you will automatically move on.</p> \
     <div style="display: flex; align-items: center; justify-content: space-between;"> \
       <iframe id="vimeo-player" \
         src="https://player.vimeo.com/video/1030059255?h=2973baf53a&autoplay=1&muted=1&controls=0&loop=0&title=0&byline=0&portrait=0&playsinline=1&keyboard=0" \
@@ -151,7 +161,7 @@ var gridwords_instructions = {
         allow="autoplay; fullscreen">\
       </iframe> \
     <img src="stimuli/instructions-grid.png" alt="instructions-grid" width="400"></div><p>Click on <strong>Next</strong> to continue.</p></div>',
-    '<div style="width: 1000px; height: 300px"><p>After the grid, the video will play again, and then you will be asked: <strong>"In 2 to 3 words, what do you think the person is thinking?"</strong></p><p>Please answer with <strong>2 to 3 words</strong> (letters only: no numbers or punctuation) that come to mind. You will have <strong>12 seconds</strong> to respond, shown by a countdown below the answer box; when the countdown reaches 0, you will automatically move on to the next video.</p><p>In the main experiment, the question will be shortened to <strong>"What do you think the person is thinking?"</strong>, but you should still answer with 2 to 3 words.</p><p>Click on <strong>Next</strong> to continue.</p></div>',
+    '<div style="width: 1000px; height: 300px"><p>After the grid, the video will play again, and then you will be asked: <strong>"In a few words, what do you think the person is thinking?"</strong></p><p>Please answer with <strong>a few words</strong> that come to mind (at least one word). You will have <strong>18 seconds</strong> to respond, shown by a countdown below the answer box; when the countdown reaches 0, you will automatically move on to the next video.</p><p>The experiment has two sections. This question will be asked in Section 1, and you will be told clearly when the question changes for Section 2.</p><p>Click on <strong>Next</strong> to continue.</p></div>',
     '<p>Now we are going to do a practice trial.</p><p>You will be shown a short video. After this, the grid will be displayed, then the video will play again, followed by the words question.</p><p>Click on <strong>Next</strong> when you are ready to start. Once you click <strong>Next</strong>, you will not be able to go back.</p>'
     ],
   show_clickable_nav: true
@@ -159,7 +169,7 @@ var gridwords_instructions = {
 
 var gridwords_instructions_again = {
   type: 'html-button-response',
-  stimulus: '<div style="width: 1000px; height: 120px"><p>You will now begin <strong>Section 1</strong>. You will be shown a series of short videos. After each one, please rate it on the grid (press the <strong>space bar</strong> to confirm your choice), watch the video again, then type 2 to 3 words describing what the person is thinking within 12 seconds, as you did in the practice trial. Starting now, your responses will be recorded.</p><p>Click <strong>Continue</strong> to start. Good luck!</p></div>',
+  stimulus: '<div style="width: 1000px; height: 120px"><p>You will now begin <strong>Section 1</strong>. You will be shown a series of short videos. After each one, please rate it on the grid within 10 seconds (press the <strong>space bar</strong> to confirm your choice), watch the video again, then type a few words describing what the person is thinking within 18 seconds, as you did in the practice trial. Starting now, your responses will be recorded.</p><p>Click <strong>Continue</strong> to start. Good luck!</p></div>',
   choices: ['Continue'],
   data: {trial:false},
   margin_vertical: '80px'
@@ -237,8 +247,30 @@ var break_mid_section1 = make_break(
 
 var break_between_sections = make_break(
   'You have completed Section 1 of the experiment.'
-  + '<br> Please take a five-minute break before moving on to Section 2.'
-  + '<p>In Section 2, the tasks are the same, but the question will change: you will now be asked what you think the person is thinking <strong>about you</strong>.</p>')
+  + '<br> Please take a five-minute break before moving on to Section 2.')
+
+// ---------------------------------------------------------
+// Section 2 transition: a clearly different screen that the
+// participant must actively acknowledge before continuing.
+// The button is the only way to proceed.
+// ---------------------------------------------------------
+var section2_transition = {
+  type: 'html-button-response',
+  stimulus:
+    '<div style="width: 900px; margin: auto; padding: 30px 40px; border: 5px solid #c0392b; border-radius: 12px; background-color: #fdecea; text-align: center;">'
+    + '<h1 style="color: #c0392b; font-weight: 800; font-size: 38px; margin: 0 0 20px 0; letter-spacing: 1px;">IMPORTANT: THE QUESTION IS CHANGING</h1>'
+    + '<p style="font-size: 22px; font-weight: bold; margin: 12px 0;">In Section 1, you were asked what the person in the video is thinking:</p>'
+    + '<p style="font-size: 22px; margin: 4px 0 18px 0;"><i>&ldquo;What do you think the person is thinking?&rdquo;</i></p>'
+    + '<p style="font-size: 24px; font-weight: 800; margin: 12px 0;">In Section 2, you will be asked something <u>categorically different</u>:</p>'
+    + '<p style="font-size: 26px; font-weight: 800; color: #c0392b; margin: 4px 0 18px 0;">What do you think the person is thinking <u>ABOUT YOU</u>?</p>'
+    + '<p style="font-size: 20px; font-weight: bold; margin: 12px 0;">You will no longer be judging what the person is thinking or feeling in general. You will be judging what the person in the video is thinking about <u>you</u>, the viewer.</p>'
+    + '<p style="font-size: 18px; margin: 12px 0 24px 0;">The tasks, the grid (10 seconds) and the few-words response (18 seconds), stay the same. Only the question changes.</p>'
+    + '<p style="font-size: 18px; font-weight: bold; margin: 0 0 6px 0;">Please click the button below to confirm that you have read and understood this change.</p>'
+    + '</div>',
+  choices: ['Yes, I have read the changes and I acknowledge that I will now be thinking about what the person in the video is thinking about ME'],
+  button_html: '<button class="jspsych-btn" style="font-size: 18px; font-weight: bold; padding: 14px 24px; max-width: 760px; white-space: normal; line-height: 1.4; background-color: #c0392b; color: white; border: none; border-radius: 8px; margin-top: 20px;">%choice%</button>',
+  data: {trial: 'section2-acknowledgement'}
+}
 
 var break_mid_section2 = make_break(
   'You have completed the first half of Section 2 of the experiment.'
@@ -360,86 +392,74 @@ var check_break = {
   };
 
 // =========================================================
-// Main procedure - the stimuli in gridwords_variables (set in
-// index.html) are dynamically chunked into 4 parts:
+// Main procedure
+//
+// The SAME set of stimuli is used in both sections so the two
+// sections can be compared directly. index.html builds:
+//   section1_stimuli - the stimulus set, in a random order
+//   section2_stimuli - the identical set, in a different random order
+//
+// Each section is split into two halves with a break between:
 //
 //   SECTION 1 (theory of mind: "...thinking?")
 //       part 1 -> attention check 1 -> BREAK 1 -> part 2
 //   BREAK 2 (between sections)
+//   SECTION 2 INTRO (must be acknowledged)
 //   SECTION 2 (metaperception: "...thinking about you?")
 //       part 3 -> attention check 2 -> BREAK 3 -> part 4
 //
-// Each participant sees every video once: parts 1-2 (first half
-// of the stimuli) are shown in Section 1, parts 3-4 in Section 2.
-// The stimulus order is already randomized per participant in
-// index.html.
-//
-// NOTE: block sizes and attention-check placement below are
-// computed dynamically rather than hardcoded, since the final
-// stimulus subset for this condition has not been finalized yet.
-// If you want exact control over which specific videos are used
-// as attention checks, replace build_procedure_blocks() with
-// fixed .slice(...) calls once the stimulus list is final.
+// Block sizes and attention-check placement are computed
+// dynamically from the length of the stimulus set.
 // =========================================================
 
-function build_procedure_blocks(variables) {
-  var total = variables.length;
-  var chunk_size = Math.ceil(total / 4);
-
-  var blocks = [];
-  for (var i = 0; i < 4; i++) {
-    var start = i * chunk_size;
-    var end = Math.min(start + chunk_size, total);
-    blocks.push(variables.slice(start, end));
-  }
-
-  function ac_slice(block_index) {
-    var start = block_index * chunk_size;
-    var mid = Math.min(start + Math.floor(chunk_size / 2), total - 1);
-    return variables.slice(mid, mid + 1);
-  }
-
+function split_section(stimuli) {
+  var half = Math.ceil(stimuli.length / 2);
+  var first_half  = stimuli.slice(0, half);
+  var second_half = stimuli.slice(half);
+  // attention check re-uses one clip from the middle of the first half
+  var ac_index = Math.min(Math.floor(first_half.length / 2), first_half.length - 1);
   return {
-    blocks: blocks,
-    ac1: ac_slice(0), // within Section 1
-    ac2: ac_slice(2)  // within Section 2
+    first_half: first_half,
+    second_half: second_half,
+    ac: first_half.slice(ac_index, ac_index + 1)
   };
 }
 
-var gridwords_procedure = build_procedure_blocks(gridwords_variables);
+var section1_blocks = split_section(section1_stimuli);
+var section2_blocks = split_section(section2_stimuli);
 
 // Section 1 trials (theory of mind prompt)
 var gridwords_procedure_pt1 = {
   timeline: [fixation, video, mask, grid_tom, fixation, video, mask, words_tom],
-  timeline_variables: gridwords_procedure.blocks[0]
+  timeline_variables: section1_blocks.first_half
 };
 
 var gridwords_procedure_pt2 = {
   timeline: [fixation, video, mask, grid_tom, fixation, video, mask, words_tom],
-  timeline_variables: gridwords_procedure.blocks[1]
+  timeline_variables: section1_blocks.second_half
 };
 
 // Section 2 trials (metaperception prompt)
 var gridwords_procedure_pt3 = {
   timeline: [fixation, video, mask, grid_meta, fixation, video, mask, words_meta],
-  timeline_variables: gridwords_procedure.blocks[2]
+  timeline_variables: section2_blocks.first_half
 };
 
 var gridwords_procedure_pt4 = {
   timeline: [fixation, video, mask, grid_meta, fixation, video, mask, words_meta],
-  timeline_variables: gridwords_procedure.blocks[3]
+  timeline_variables: section2_blocks.second_half
 };
 
 var gridwords_attention_check_procedure1 = {
   timeline: [fixation, video, mask, grid_attention_check1],
   randomize_order: false,
-  timeline_variables: gridwords_procedure.ac1
+  timeline_variables: section1_blocks.ac
 };
 
 var gridwords_attention_check_procedure2 = {
   timeline: [fixation, video, mask, grid_attention_check2],
   randomize_order: false,
-  timeline_variables: gridwords_procedure.ac2
+  timeline_variables: section2_blocks.ac
 };
 
 var TOM_GRIDWORDS = [
@@ -451,8 +471,9 @@ var TOM_GRIDWORDS = [
   break_mid_section1,
   gridwords_procedure_pt2,
 
-  // ---------- break between sections ----------
+  // ---------- break between sections + acknowledgement ----------
   break_between_sections,
+  section2_transition,
 
   // ---------- SECTION 2: metaperception ----------
   gridwords_procedure_pt3, gridwords_attention_check_procedure2, check_attention_failures,
