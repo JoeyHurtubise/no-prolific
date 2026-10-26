@@ -708,15 +708,7 @@ jsPsych.plugins['survey-demo'] = (function() {
     html += '<input type="number" name="yearsresidence" min="1" max="100" size="20" required>';
     html += '</div></div>';
 
-    // Item 8a: Participant born in the USA?
-    html += '<div class="survey-demo-row">';
-    html += '<div class="survey-demo-prompt"><label for="bornusa">Were you born in the United States of America?</label></div>';
-    html += '<div class="survey-demo-response">';
-    html += '<label><input type="radio" name="bornusa" value="Yes" required>Yes</label><br>';
-    html += '<label><input type="radio" name="bornusa" value="No" required>No</label>';
-    html += '</div></div>';
-
-    // Item 8b: Parents born in the USA?
+    // Item 8a: Parents born in the USA?
     html += '<div class="survey-demo-row">';
     html += '<div class="survey-demo-prompt"><label for="parentsbornusa">Were your parents born in the United States of America?</label></div>';
     html += '<div class="survey-demo-response">';
@@ -726,7 +718,7 @@ jsPsych.plugins['survey-demo'] = (function() {
     html += '<label><input type="radio" name="parentsbornusa" value="Not sure" required>I am not sure</label>';
     html += '</div></div>';
 
-    // Item 8c: Socioeconomic standing (census-style: total household income from all sources, before taxes)
+    // Item 8b: Socioeconomic standing (census-style: total household income from all sources, before taxes)
     html += '<div class="survey-demo-row">';
     html += '<div class="survey-demo-prompt"><label for="householdincome">What was your total household income in the last year, from all sources and before taxes and deductions? <small>(Include the income of everyone living in your household. If not in US dollars, please select the closest equivalent.)</small></label></div>';
     html += '<div class="survey-demo-response">';

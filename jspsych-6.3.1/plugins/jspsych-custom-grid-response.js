@@ -95,6 +95,7 @@ jsPsych.plugins['html-custom-grid-response'] = (function () {
         if (trial.timer_seconds) {
             grid_html += "<div id='grid-timer' style='font-size: 28px; font-weight: bold; margin-top: 6px;'>" + trial.timer_seconds + "</div>"
         }
+        grid_html += "<div style='margin-top: 6px;'><button id='grid-continue' class='jspsych-btn' disabled>Continue</button></div>"
         grid_html += "<div id='feedback' class='feedback'> <br> </div> <br></body> </html>"
 
         display_element.innerHTML = grid_html;
@@ -124,6 +125,9 @@ jsPsych.plugins['html-custom-grid-response'] = (function () {
 
         //Function that saves the x and y coordinates of the grid mouse click
         var click_listener = function (e) {
+
+            //Ignore clicks on the Continue button (they are not grid selections)
+            if (e.target && e.target.closest && e.target.closest('#grid-continue')) { return; }
 
             //Get mouse click coordinates
             click_x = e.clientX;
@@ -157,6 +161,20 @@ jsPsych.plugins['html-custom-grid-response'] = (function () {
         }
 
         var clicked_already = false;
+        var ended = false;
+
+        //The trial is confirmed by clicking the Continue button or pressing Enter
+        //(only possible once a spot on the grid has been selected). No space bar.
+        document.getElementById('grid-continue').addEventListener('click', function () {
+            if (clicked_already) { end_trial(); }
+        });
+        var enter_listener = function (e) {
+            if (e.key === 'Enter' && clicked_already) {
+                e.preventDefault();
+                end_trial();
+            }
+        };
+        document.addEventListener('keydown', enter_listener);
 
         //Countdown timer (optional): ends the trial automatically at 0
         var countdown_interval = null;
@@ -253,8 +271,8 @@ jsPsych.plugins['html-custom-grid-response'] = (function () {
                 document.getElementById("feedback").innerHTML = msg;
             }
 
-            //Wait for keyboard response
-            keyboard_response();
+            //A spot has been chosen: allow the participant to continue
+            document.getElementById('grid-continue').disabled = false;
 
         };
 
@@ -272,19 +290,12 @@ jsPsych.plugins['html-custom-grid-response'] = (function () {
             );
         }
 
-        //Function that waits for space bar to be pressed
-        function keyboard_response() {
-            jsPsych.pluginAPI.getKeyboardResponse({
-                callback_function: end_trial,
-                valid_responses: [' '],
-                rt_method: 'performance',
-                persist: false,
-                allow_held_key: false
-            });
-        }
-
         //Function that ends the trial
         var end_trial = function () {
+
+            if (ended) { return; }
+            ended = true;
+            document.removeEventListener('keydown', enter_listener);
 
             //Get rid of screen traces, timeouts, listeners...
             if (countdown_interval) { clearInterval(countdown_interval); }

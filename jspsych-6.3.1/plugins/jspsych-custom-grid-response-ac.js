@@ -100,7 +100,7 @@ jsPsych.plugins['html-custom-grid-response-ac'] = (function () {
 
         grid_html += "<body onload='draw()'> <div class='container'> <div id='top'>" + top + "</div> <div class='middle'> <div id='center_left'>" + left + "</div> <div id='mid'>"
         grid_html += "<div id='field' > <canvas id='canvas' width='300' height='300'></canvas> </div></div> <div id='center_right'>" + right + "</div> </div>"
-        grid_html += "<div id='bottom'>" + bottom + "</div> </div>  <br> <div id='feedback' class='feedback'> <br> </div> <br></body> </html>"
+        grid_html += "<div id='bottom'>" + bottom + "</div> </div>  <br>" + "<div style='margin-top: 6px;'><button id='grid-continue' class='jspsych-btn' disabled>Continue</button></div>" + "<div id='feedback' class='feedback'> <br> </div> <br></body> </html>"
 
         display_element.innerHTML = grid_html;
 
@@ -139,6 +139,9 @@ jsPsych.plugins['html-custom-grid-response-ac'] = (function () {
         //Function that saves the x and y coordinates of the grid mouse click
         var click_listener = function (e) {
 
+            //Ignore clicks on the Continue button (they are not grid selections)
+            if (e.target && e.target.closest && e.target.closest('#grid-continue')) { return; }
+
             //Get mouse click coordinates
             click_x = e.clientX;
             click_y = e.clientY;
@@ -170,6 +173,20 @@ jsPsych.plugins['html-custom-grid-response-ac'] = (function () {
         }
 
         var clicked_already = false;
+        var ended = false;
+
+        //The trial is confirmed by clicking the Continue button or pressing Enter
+        //(only possible once a spot on the grid has been selected). No space bar.
+        document.getElementById('grid-continue').addEventListener('click', function () {
+            if (clicked_already) { end_trial(); }
+        });
+        var enter_listener = function (e) {
+            if (e.key === 'Enter' && clicked_already) {
+                e.preventDefault();
+                end_trial();
+            }
+        };
+        document.addEventListener('keydown', enter_listener);
 
         //Function to handle mouse click responses
         var after_response = function (x_coords, y_coords, left, top) {
@@ -244,8 +261,8 @@ jsPsych.plugins['html-custom-grid-response-ac'] = (function () {
                 document.getElementById("feedback").innerHTML = msg;
             }
 
-            //Wait for keyboard response
-            keyboard_response();
+            //A spot has been chosen: allow the participant to continue
+            document.getElementById('grid-continue').disabled = false;
 
         };
 
@@ -263,19 +280,12 @@ jsPsych.plugins['html-custom-grid-response-ac'] = (function () {
             );
         }
 
-        //Function that waits for space bar to be pressed
-        function keyboard_response() {
-            jsPsych.pluginAPI.getKeyboardResponse({
-                callback_function: end_trial,
-                valid_responses: [' '],
-                rt_method: 'performance',
-                persist: false,
-                allow_held_key: false
-            });
-        }
-
         //Function that ends the trial
         var end_trial = function () {
+
+            if (ended) { return; }
+            ended = true;
+            document.removeEventListener('keydown', enter_listener);
 
             //Get rid of screen traces, timeouts, listeners...
             $('#point').remove();

@@ -149,28 +149,100 @@
     var random_extras = shuffle(catalogue_remainder).slice(0, 10)
 
     // ------------------------------------------------------------
-    // Stimulus set shared by BOTH sections
+    // Stimulus selection
     // ------------------------------------------------------------
-    // The same 20 stimuli are used in Section 1 (regular ToM question)
-    // and Section 2 (metaperception question) so the two sections can
-    // be compared. The set is drawn once per participant, then each
-    // section gets its own independent random order.
+    // The "allowed" pool is 40 clips: the 30 curated clips + the 10
+    // random extras drawn above. From this pool, 20 clips are chosen
+    // ONCE per participant. That same set of 20 is used in Section 1
+    // (regular ToM question) and Section 2 (metaperception question),
+    // each section in its own random order, so the two sections can
+    // be compared.
+    //
+    // Rules enforced here (and checked before the experiment starts):
+    //   - no clip appears twice within a section (de-duplicated by URL)
+    //   - the same actor never appears in two consecutive trials
+    //     (also across the practice trial -> first Section 1 trial,
+    //      and the last Section 1 trial -> first Section 2 trial)
+    //   - Section 2 is not in the same order as Section 1
+    //   - the 20 clips NOT chosen (rest of the 40) are held out and are
+    //     only used for the two attention-check trials, so an attention
+    //     check never repeats a clip the participant has already seen in
+    //     that section.
     var N_STIMULI_PER_SECTION = 20
 
-    var stimulus_pool = shuffle(video_info_selected.concat(random_extras))
-    var section_stimulus_set = stimulus_pool.slice(0, N_STIMULI_PER_SECTION)
+    // The practice video is by actor 12 (code F5): avoid starting Section 1 with that actor.
+    var practice_actor_code = actor_code_map[12]
+
+    function unique_by_url(list) {
+      var seen = {}
+      return list.filter(function (v) {
+        if (seen[v.player_embed_url]) return false
+        seen[v.player_embed_url] = true
+        return true
+      })
+    }
+
+    // Returns a random ordering of `items` in which no two neighbouring
+    // clips share an actor and the first clip's actor differs from
+    // `prev_actor`. Returns null if no such ordering could be found.
+    function order_without_actor_repeats(items, prev_actor) {
+      function ok(arr) {
+        if (arr[0].actor === prev_actor) return false
+        for (var i = 1; i < arr.length; i++) { if (arr[i].actor === arr[i - 1].actor) return false }
+        return true
+      }
+      // 1) plain random shuffles
+      for (var t = 0; t < 3000; t++) {
+        var cand = shuffle(items.slice())
+        if (ok(cand)) return cand
+      }
+      // 2) randomized greedy fallback: always take from the actor with most clips left
+      for (var t2 = 0; t2 < 200; t2++) {
+        var left = shuffle(items.slice()), out = [], last = prev_actor
+        while (left.length) {
+          var counts = {}
+          left.forEach(function (v) { counts[v.actor] = (counts[v.actor] || 0) + 1 })
+          var allowed = Object.keys(counts).filter(function (a) { return a !== last })
+          if (!allowed.length) break
+          var best = Math.max.apply(null, allowed.map(function (a) { return counts[a] }))
+          var tops = allowed.filter(function (a) { return counts[a] === best })
+          var pick_actor = tops[Math.floor(Math.random() * tops.length)]
+          var idx = left.findIndex(function (v) { return v.actor === pick_actor })
+          out.push(left.splice(idx, 1)[0])
+          last = pick_actor
+        }
+        if (!left.length && ok(out)) return out
+      }
+      return null
+    }
 
     function same_order(a, b) {
       for (var i = 0; i < a.length; i++) { if (a[i] !== b[i]) return false }
       return true
     }
 
-    var section1_stimuli = shuffle(section_stimulus_set.slice())
-    var section2_stimuli = shuffle(section_stimulus_set.slice())
-    // make sure Section 2 is not accidentally in the exact same order as Section 1
-    while (section_stimulus_set.length > 1 && same_order(section1_stimuli, section2_stimuli)) {
-      section2_stimuli = shuffle(section2_stimuli)
+    var section1_stimuli, section2_stimuli, section_stimulus_set, attention_check_pool
+    var stimuli_ok = false
+    for (var attempt = 0; attempt < 500 && !stimuli_ok; attempt++) {
+      // the 40-clip pool (curated + random extras), de-duplicated
+      var stimulus_pool = shuffle(unique_by_url(video_info_selected.concat(random_extras)))
+      section_stimulus_set = stimulus_pool.slice(0, N_STIMULI_PER_SECTION)
+      attention_check_pool = stimulus_pool.slice(N_STIMULI_PER_SECTION)   // held out
+
+      var o1 = order_without_actor_repeats(section_stimulus_set, practice_actor_code)
+      if (!o1) continue
+      var o2 = null
+      for (var k = 0; k < 50; k++) {
+        o2 = order_without_actor_repeats(section_stimulus_set, o1[o1.length - 1].actor)
+        if (o2 && !same_order(o1, o2)) break
+        o2 = null
+      }
+      if (!o2) continue
+      section1_stimuli = o1
+      section2_stimuli = o2
+      stimuli_ok = true
     }
+    if (!stimuli_ok) { console.error('Could not build stimulus orders that satisfy all constraints.') }
 
     // Progress bar: 2 increments per stimulus per section (grid + words),
     // plus 2 attention-check increments, plus 1 for demographics and 1 for consent.

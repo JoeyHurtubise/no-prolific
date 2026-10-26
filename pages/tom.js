@@ -128,7 +128,7 @@ function make_words(prompt_html, section) {
 var grid_practice = make_grid(
   PROMPT_TOM
   + '<br>Please locate the spot in the grid that best matches your impression by pointing and clicking the mouse.'
-  + '<br>You have <b>10 seconds</b> (shown by the countdown below the grid). Press the <b>space bar</b> to confirm your choice, or wait for the countdown to finish.',
+  + '<br>You have <b>10 seconds</b> (shown by the countdown below the grid). Click the <b>Continue</b> button (or press <b>Enter</b>) to confirm your choice, or wait for the countdown to finish.',
   'practice')
 
 var words_practice = make_words(PROMPT_TOM_WORDS, 'practice')
@@ -151,7 +151,7 @@ var gridwords_instructions = {
     '<div style="width: 1000px; height: 300px"><p>This test will investigate your ability to read emotion and infer mental states from an expression.</p><p>You will be shown a short video demonstrating an expression. After each video, you will do three things: first, place a mark on a grid describing the emotion, within <strong>10 seconds</strong>; second, watch the same video again; third, type a few words describing what you think the person is thinking, within <strong>18 seconds</strong>.</p><p>The experiment has two sections with the same tasks. The question you are asked will differ slightly between the two sections, and you will be told when it changes.</p><p>Click on <strong>Next</strong> to see an example.</p></div>',
     '<div style="width: 1000px; height: 700px;"> \
     <p>Here is an example of a valence-arousal grid. Clicking somewhere in the upper right quadrant would mean that you consider this expression to be more positive and higher arousal.</p> \
-    <p>You will have <strong>10 seconds</strong> to make your selection, shown by a countdown below the grid. Press the <strong>space bar</strong> to confirm your choice; when the countdown reaches 0, you will automatically move on.</p> \
+    <p>You will have <strong>10 seconds</strong> to make your selection, shown by a countdown below the grid. After you click a spot on the grid, click the <strong>Continue</strong> button (or press <strong>Enter</strong>) to confirm your choice; when the countdown reaches 0, you will automatically move on.</p> \
     <div style="display: flex; align-items: center; justify-content: space-between;"> \
       <iframe id="vimeo-player" \
         src="https://player.vimeo.com/video/1030059255?h=2973baf53a&autoplay=1&muted=1&controls=0&loop=0&title=0&byline=0&portrait=0&playsinline=1&keyboard=0" \
@@ -169,7 +169,7 @@ var gridwords_instructions = {
 
 var gridwords_instructions_again = {
   type: 'html-button-response',
-  stimulus: '<div style="width: 1000px; height: 120px"><p>You will now begin <strong>Section 1</strong>. You will be shown a series of short videos. After each one, please rate it on the grid within 10 seconds (press the <strong>space bar</strong> to confirm your choice), watch the video again, then type a few words describing what the person is thinking within 18 seconds, as you did in the practice trial. Starting now, your responses will be recorded.</p><p>Click <strong>Continue</strong> to start. Good luck!</p></div>',
+  stimulus: '<div style="width: 1000px; height: 120px"><p>You will now begin <strong>Section 1</strong>. You will be shown a series of short videos. After each one, please rate it on the grid within 10 seconds (click <strong>Continue</strong> or press <strong>Enter</strong> to confirm your choice), watch the video again, then type a few words describing what the person is thinking within 18 seconds, as you did in the practice trial. Starting now, your responses will be recorded.</p><p>Click <strong>Continue</strong> to start. Good luck!</p></div>',
   choices: ['Continue'],
   data: {trial:false},
   margin_vertical: '80px'
@@ -261,7 +261,7 @@ var section2_transition = {
     + '<h1 style="color: #c0392b; font-weight: 800; font-size: 38px; margin: 0 0 20px 0; letter-spacing: 1px;">IMPORTANT: THE QUESTION IS CHANGING</h1>'
     + '<p style="font-size: 22px; font-weight: bold; margin: 12px 0;">In Section 1, you were asked what the person in the video is thinking:</p>'
     + '<p style="font-size: 22px; margin: 4px 0 18px 0;"><i>&ldquo;What do you think the person is thinking?&rdquo;</i></p>'
-    + '<p style="font-size: 24px; font-weight: 800; margin: 12px 0;">In Section 2, you will be asked something <u>categorically different</u>:</p>'
+    + '<p style="font-size: 24px; font-weight: 800; margin: 12px 0;">In Section 2, you will be asked <u>a different question</u>:</p>'
     + '<p style="font-size: 26px; font-weight: 800; color: #c0392b; margin: 4px 0 18px 0;">What do you think the person is thinking <u>ABOUT YOU</u>?</p>'
     + '<p style="font-size: 20px; font-weight: bold; margin: 12px 0;">You will no longer be judging what the person is thinking or feeling in general. You will be judging what the person in the video is thinking about <u>you</u>, the viewer.</p>'
     + '<p style="font-size: 18px; margin: 12px 0 24px 0;">The tasks, the grid (10 seconds) and the few-words response (18 seconds), stay the same. Only the question changes.</p>'
@@ -284,7 +284,7 @@ var break_mid_section2 = make_break(
 var grid_attention_check1 = {
   type: 'html-custom-grid-response-ac',
   around_grid: 'labels',
-  stimulus: "If you are paying attention, please click anywhere in the <span style='color: #ff0000;'><strong>bottom left quadrant</strong></span>.<br>Press the <b>space bar</b> when you\'re ready to continue.<br><br>",
+  stimulus: "If you are paying attention, please click anywhere in the <span style='color: #ff0000;'><strong>bottom left quadrant</strong></span>.<br>Click the <b>Continue</b> button (or press <b>Enter</b>) when you\'re ready to continue.<br><br>",
   grid_height: 300,
   maintain_aspect_ratio: true,
   xcoord: 20,
@@ -310,7 +310,7 @@ var grid_attention_check1 = {
 var grid_attention_check2 = {
   type: 'html-custom-grid-response-ac',
   around_grid: 'labels',
-  stimulus: "If you are paying attention, please click anywhere in the <span style='color: #ff0000;'><strong>top left quadrant</strong></span>.<br>Press the <b>space bar</b> when you\'re ready to continue.<br><br>",
+  stimulus: "If you are paying attention, please click anywhere in the <span style='color: #ff0000;'><strong>top left quadrant</strong></span>.<br>Click the <b>Continue</b> button (or press <b>Enter</b>) when you\'re ready to continue.<br><br>",
   grid_height: 300,
   maintain_aspect_ratio: true,
   xcoord: 20,
@@ -396,7 +396,7 @@ var check_break = {
 //
 // The SAME set of stimuli is used in both sections so the two
 // sections can be compared directly. index.html builds:
-//   section1_stimuli - the stimulus set, in a random order
+//   section1_stimuli - the stimulus set, in a random order (no actor twice in a row)
 //   section2_stimuli - the identical set, in a different random order
 //
 // Each section is split into two halves with a break between:
@@ -412,16 +412,29 @@ var check_break = {
 // dynamically from the length of the stimulus set.
 // =========================================================
 
+// Picks an attention-check clip from the held-out clips (the ones NOT used in
+// either section), so no stimulus is repeated within a section. The clip's actor
+// also differs from the trial before and after it, so the same actor never
+// appears twice in a row. The chosen clip is removed from the pool so the two
+// attention checks use different clips.
+function pick_attention_clip(pool, before_actor, after_actor) {
+  var ok = pool.filter(function (v) { return v.actor !== before_actor && v.actor !== after_actor });
+  var chosen = (ok.length ? ok : pool)[Math.floor(Math.random() * (ok.length ? ok.length : pool.length))];
+  pool.splice(pool.indexOf(chosen), 1);
+  return [chosen];
+}
+
 function split_section(stimuli) {
   var half = Math.ceil(stimuli.length / 2);
   var first_half  = stimuli.slice(0, half);
   var second_half = stimuli.slice(half);
-  // attention check re-uses one clip from the middle of the first half
-  var ac_index = Math.min(Math.floor(first_half.length / 2), first_half.length - 1);
   return {
     first_half: first_half,
     second_half: second_half,
-    ac: first_half.slice(ac_index, ac_index + 1)
+    // attention check sits between the two halves
+    ac: pick_attention_clip(attention_check_pool,
+                            first_half[first_half.length - 1].actor,
+                            second_half[0].actor)
   };
 }
 
